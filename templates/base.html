@@ -1,0 +1,59 @@
+{% load static %}
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta http-equiv="content-type" content="text/html" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="description">
+<meta name="author" content="Zheng Zhou">
+<title>
+    {% block pagetitle %}
+    {% endblock pagetitle %}
+</title>
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/vendor/bootstrap.min.css' %}">
+{# <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Roboto'> #}
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/stylesheet.css' %}">
+<script type="text/javascript" src="{% static 'scripts/vendor/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/js.cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/d3-scale-chromatic.v1.min.js' %}"></script>
+</head>
+<body>
+    {% block startscript %}
+    {% endblock startscript %}
+    <div class="container">
+        <div class="row header">
+            {% block header %}
+            {% endblock header %}
+        </div>
+        <div class="row content" id="content">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        {% if "color" in q.q_dimension %}
+            <div class="row legend">
+                <div class="col"></div>
+                <div class="col" id="legend"></div>
+                <div class="col"></div>
+            </div>
+        {% endif %}
+        <div class="row footer">
+            {% block footer %}
+            {% endblock footer %}
+        </div>
+    </div>
+    {% block endscript %}
+    {% endblock endscript %}
+    <script type="text/javascript" src="{% static 'scripts/tooltip.js' %}"></script>
+
+    {% if '1d' in request.path %}
+        <script type="text/javascript" src="{% static 'scripts/click_1d.js' %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static 'scripts/click.js' %}"></script>
+    {% endif %}
+
+    <script type="text/javascript" src="{% static 'scripts/submit.js' %}"></script>
+</body>
+</html>

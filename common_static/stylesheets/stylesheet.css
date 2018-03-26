@@ -1,0 +1,72 @@
+html, body {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 16px;
+    /*width: 1800px;*/
+    /*margin: auto;*/
+    overflow: hidden;
+}
+
+div.container {
+    max-width: 1803px;
+}
+
+div.header, div.content, div.footer {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+div.header h2,
+div.header h3,
+div.content h2,
+div.content p {
+    text-align: center;
+}
+
+
+div.footer {
+    text-align: center;
+}
+
+.header-text {
+    line-height: 1.5;
+}
+
+div.tooltip-inner {
+    min-width: 100px;
+    max-width: 400px;
+    text-align: justify;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+input[type=number] {
+    -moz-appearance: textfield !important;
+}
+
+div#min-div, div#max-div, div#val-div {
+    outline: dashed 1px darkgreen;
+}
+
+div.col {
+    padding-left: 0;
+    padding-right: 0;
+    line-height: 1.5;
+}
+
+.btn-primary,
+.btn-warning {
+    margin-top: 20px;
+}
+
+.modal-backdrop {
+    background-color: #242424;
+    opacity: 1 !important;
+}
+
+.blur {
+    -webkit-filter: blur(5px) grayscale(50%);
+}
