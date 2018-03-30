@@ -6,6 +6,11 @@ html, body {
     overflow: hidden;
 }
 
+canvas {
+    width: 600px;
+    height: 600px;
+}
+
 div.container {
     max-width: 1803px;
 }

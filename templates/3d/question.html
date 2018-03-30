@@ -2,27 +2,32 @@
 {% load static %}
 
 {% block startscript %}
-<script type="text/javascript">
-    var qType = '{{ q.q_type }}';
-    var qDimension = '{{ q.q_dimension }}';
-    var qSet = '{{ q.q_set }}';
-    var qIndex = '{{ q.q_index }}';
-    var qVal;
-    if (qType == 'pilot' && qDimension == 'length') {
-        qVal = 300;
-    }
-    else if (qType == 'pilot' && qDimension == 'area_color') {
-        qVal = 6666;
-    }
-    else {
-        qVal = '{{ q_val }}';
-    }
-    // console.log('q_val: ');
-    // console.log(qVal);
-    const qMin = '{{ q.q_min }}';
-    const qMax = '{{ q.q_max }}';
-    window.sessionStorage.setItem('session', qDimension);
-</script>
+    <script type="text/javascript">
+        var qType = '{{ q.q_type }}';
+        var qDimension = '{{ q.q_dimension }}';
+        var qSet = '{{ q.q_set }}';
+        var qIndex = '{{ q.q_index }}';
+        var qVal;
+        if (qType == 'pilot' && qDimension == 'length') {
+            qVal = 300;
+        }
+        else if (qType == 'pilot' && qDimension == 'area_color') {
+            qVal = 6666;
+        }
+        else {
+            qVal = '{{ q_val }}';
+        }
+        // console.log('q_val: ');
+        // console.log(qVal);
+        const qMin = '{{ q.q_min }}';
+        const qMax = '{{ q.q_max }}';
+        window.sessionStorage.setItem('session', qDimension);
+    </script>
+    {% if 'volume' in q.q_dimension %}
+        <script type="text/javascript" src="{% static 'scripts/vendor/three.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'scripts/vendor/Projector.js' %}"></script>
+        <script type="text/javascript" src="{% static 'scripts/vendor/CanvasRenderer.js' %}"></script>
+    {% endif %}
 {% endblock startscript %}
 
 {% block pagetitle %}
@@ -116,7 +121,7 @@
 
 
 {% block endscript %}
-    <script type="text/javascript" src="{% static 'scripts/render_1d.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/render.js' %}"></script>
     <script type="text/javascript">
         var loadedTime;
         window.addEventListener('load', function(e) {

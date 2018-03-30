@@ -128,11 +128,11 @@ class QuestionView(TemplateView):
                            a_page_loaded=loaded_time,
                            a_start_time=start_answer_time,
                            a_submit_time=submit_answer_time)
-                a.save()
+                # a.save()
             else:
                 a = Answer.objects.get(q_id=q.id)
                 a.a_val = a_val
-                a.save()
+                # a.save()
         else:
             error_msg = answer_input_obj.errors
             data['error'] = error_msg
