@@ -125,7 +125,6 @@
     <script type="text/javascript">
         var loadedTime;
         window.addEventListener('load', function(e) {
-            // loadedTime = new Date(Date.now());
             loadedTime = Date.now();
             // console.log(new Date(Date.now()));
             // console.log('window loaded!');
@@ -137,9 +136,5 @@
                 alert('Click to answer only after you are ready to answer!!! \n请确认您已思考完毕且完全准备好答题时再点击！');
             }, false);
         }
-        // Cookies.set('qType', qType, {expires: 7});
-        // Cookies.set('qDimension', qDimension, {expires: 7});
-        // Cookies.set('qSet', qSet, {expires: 7});
-        // Cookies.set('qIndex', qIndex, {expires: 7});
     </script>
 {% endblock endscript %}

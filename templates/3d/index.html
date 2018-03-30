@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block startscript %}
+    <script type="text/javascript" src="{% static 'scripts/vendor/Detector.js' %}"></script>
+    <script type="text/javascript">
+        if (!Detector.webgl) {
+            alert('The web browser you are using does not support WebGL. \nPlease change to other most updated modern browser');
+            window.location.href = 'dcoding/end';
+        }
+    </script>
+{% endblock startscript %}
+
 {% block pagetitle %}
     Introduction
 {% endblock pagetitle %}
