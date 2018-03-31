@@ -13,8 +13,9 @@ const orderNum = 5;
 const orders = [1, 2, 3, 4, 5];
 
 const viewWidth = 600,
-      viewHeight = 600,
-      canvasSize = 600;
+      viewHeight = 600;
+
+var canvasSize = 600;
 
 const frustumSize = 1000;
 
@@ -32,14 +33,80 @@ const maxLocal = orderLimits.max();
 const valLocal = qVal;
 
 
-if (qDimension == 'length' || qDimension == 'area' || qDimension == 'volume'){
-    document.getElementById('min-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最小参考值">Minimum Value Reference: ' + qMin + '</p>';
-    document.getElementById('max-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最大参考值">Maximum Value Reference: ' + qMax + '</p>';
-    document.getElementById('val-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="请估计所表示数值">Value estimation?</p>';
-} else {
-    document.getElementById('min-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最小参考值">Minimum Value Reference: ' + minLocal + '</p>';
-    document.getElementById('max-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最大参考值">Maximum Value Reference: ' + maxLocal + '</p>';
-    document.getElementById('val-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="请估计所表示数值">Value estimation?</p>';
+render(qDimension, qVal);
+
+for (let i = 0; i < args.length; i++) {
+    annotate(args[i]);
+}
+
+function annotate(arg) {
+    let p = document.createElement('p'),
+        title = {'min': '最小参考值', 'max': '最大参考值', 'val': '请估计所表示数值'},
+        text;
+    p.setAttribute('data-toggle', 'tooltip');
+    p.setAttribute('data-placement', 'bottom');
+    p.setAttribute('title', title[arg]);
+    if (qDimension.indexOf('color') == -1){
+        text = {'min': 'Minimum Value Reference: ' + qMin.toString(),
+                    'max': 'Maximum Value Reference: ' + qMax.toString(),
+                    'val': 'Value Estimation?'};
+    } else {
+        text = {'min': 'Minimum Value Reference: ' + minLocal.toString(),
+                    'max': 'Maximum Value Reference: ' + maxLocal.toString(),
+                    'val': 'Value Estimation?'};
+    }
+    p.innerHTML = text[arg];
+    document.getElementById(arg + '-div').appendChild(p);
+}
+
+$(window).resize(function() {
+    if (qDimension.indexOf('volume') == -1) {
+        svgWidth = $('#min-div').width() - 1;
+        svgHeight = svgWidth;
+    }
+});
+
+function render(dimension, value) {
+    let colorOption = {'no_color': 0, 'color': 1, 'bg_color': -1};
+    switch(dimension) {
+        case 'length':
+            renderBars(value, colorOption.no_color);
+            break;
+        case 'length_color':
+            renderBars(value, colorOption.color);
+            renderLegend();
+            break;
+        case 'length_background_color':
+            renderBars(value, colorOption.bg_color);
+            renderLegend();
+            break;
+        case 'area':
+            renderRects(value, colorOption.no_color);
+            break;
+        case 'area_color':
+            renderRects(value, colorOption.color);
+            renderLegend();
+            break;
+        case 'area_background_color':
+            renderRects(value, colorOption.bg_color);
+            renderLegend();
+            break;
+        case 'volume':
+            renderCubes(value, colorOption.no_color);
+            break;
+        case 'volume_color':
+            renderCubes(value, colorOption.color);
+            renderLegend();
+            break;
+        case 'volume_background_color':
+            renderCubes(value, colorOption.bg_color);
+            renderLegend();
+            break;
+        default:
+            console.log('why default???');
+            break;
+    }
+    return 1;
 }
 
 function renderBars(value, color) {
@@ -61,9 +128,9 @@ function renderBars(value, color) {
       .attr('width', svgWidth)
       .attr('height', svgHeight);
 
-    document.getElementById('min-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('max-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('val-svg').setAttribute('viewbox', '0 0 600 600');
+    document.getElementById('min-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
 
     let barWidth = 5,
         minH = 5,
@@ -137,9 +204,9 @@ function renderRects(value, color) {
       .attr('width', svgWidth)
       .attr('height', svgHeight);
 
-    document.getElementById('min-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('max-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('val-svg').setAttribute('viewbox', '0 0 600 600');
+    document.getElementById('min-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
 
     let normW = 5,
         normH = 5,
@@ -308,7 +375,7 @@ function renderRects(value, color) {
 
 function renderCubes(value, color) {
     let min = qMin,
-        max = 10648, //qMax won't fit
+        max = qMax,
         val = value,
         pointer = 0;
     function render(arg) {
@@ -316,14 +383,15 @@ function renderCubes(value, color) {
         init(arg);
         renderScene();
         function init(arg){
+            let boxSize = 40;
             let axes, grid, boxGeo, wireGeo, boxMat, wireMat,
-                startPos = new THREE.Vector3(-550, 0, -550),
-                camPos = new THREE.Vector3(850, 1200, 850),
-                lookAtPos = new THREE.Vector3(-800, 0, -800),
-                gridSize = 1100,
-                gridCnt = 22,
+                startPos = new THREE.Vector3(-500, 0, -500),
+                camPos = new THREE.Vector3(1250, 1100, 1250),
+                lookAtPos = new THREE.Vector3(-1500, 0, -1500),
+                gridCnt = 25,
+                gridSize = 1000,
                 gridColor = 0xd3d3d3,
-                axesSize = 50,
+                axesSize = 500,
                 matColor, backgroundColor;
             if (color == 0) {
                 matColor = 0xf0f0f0,
@@ -348,9 +416,16 @@ function renderCubes(value, color) {
             renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
             // renderer = new THREE.CanvasRenderer();
             // renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(canvasSize, canvasSize);
-            renderer.autoClear = true;
-            boxGeo = new THREE.BoxGeometry(50, 50, 50, 1, 1, 1);
+            if (window.innerWidth >= 1800){
+                renderer.setSize(canvasSize, canvasSize);
+            } else if (window.innerWidth < 1800 && window.innerWidth >= 1280) {
+                renderer.setSize(canvasSize/1.5, canvasSize/1.5);
+            } else if (window.innerWidth < 1280) {
+                renderer.setSize(canvasSize/2, canvasSize/2);
+            }
+            // renderer.autoClear = true;
+            // renderer.preserveDrawingBuffer = true;
+            boxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize, 1, 1, 1);
             boxMat = new THREE.MeshBasicMaterial({color:matColor, overdraw:0.5});
             wireGeo = new THREE.EdgesGeometry(boxGeo);
             wireMat = new THREE.LineBasicMaterial({color:0x000000, linewidth:2});
@@ -358,7 +433,6 @@ function renderCubes(value, color) {
             mesh.position.copy(startPos);
             wireframe = new THREE.LineSegments(wireGeo, wireMat);
             wireframe.position.copy(startPos);
-
 
             axes = new THREE.AxesHelper(axesSize);
             axes.renderOrder = 1000;
@@ -376,7 +450,8 @@ function renderCubes(value, color) {
             scene.add(wireframe);
 
             let parEle = document.getElementById(arg + '-div');
-            parEle.insertBefore(renderer.domElement, parEle.firstChild);
+            parEle.appendChild(renderer.domElement);
+            window.addEventListener('resize', onWindowResize, false);
 
             if (color == 0) {
                 createAll(arg);
@@ -388,7 +463,7 @@ function renderCubes(value, color) {
             function createObj(arg, deltaX, deltaY, deltaZ) {
                 let meshClone = mesh.clone(),
                     wireClone = wireframe.clone(),
-                    offset = new THREE.Vector3(50 * deltaZ, 50 * deltaY, 50 * deltaX);
+                    offset = new THREE.Vector3(boxSize * deltaZ, boxSize * deltaY, boxSize * deltaX);
                 meshClone.position.add(offset);
                 wireClone.position.add(offset);
                 scene.add(meshClone);
@@ -431,6 +506,24 @@ function renderCubes(value, color) {
                     for (let i = 0; i < minor; i++) {
                         createObj(arg, major2D, i, major3D);
                     }
+                }
+            }
+
+            function onWindowResize() {
+                camera.left = frustumSize * aspectRatio / 2;
+                camera.right = frustumSize * aspectRatio / -2;
+                camera.top = frustumSize * aspectRatio / 2;
+                camera.bottom = frustumSize * aspectRatio / -2;
+                camera.updateProjectionMatrix();
+                if (window.innerWidth >= 1800) {
+                    canvasSize = 600;
+                    renderer.setSize(canvasSize, canvasSize);
+                } else if (window.innerWidth < 1800 && window.innerWidth >= 1280) {
+                    canvasSize = 400;
+                    renderer.setSize(canvasSize, canvasSize);
+                } else if (window.innerWidth < 1280) {
+                    canvasSize = 300;
+                    renderer.setSize(canvasSize, canvasSize);
                 }
             }
         }
@@ -487,50 +580,6 @@ function renderLegend() {
     }
 }
 
-function render(dimension, value) {
-    let colorOption = {'no_color': 0, 'color': 1, 'bg_color': -1};
-    switch(dimension) {
-        case 'length':
-            renderBars(value, colorOption.no_color);
-            break;
-        case 'length_color':
-            renderBars(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'length_background_color':
-            renderBars(value, colorOption.bg_color);
-            renderLegend();
-            break;
-        case 'area':
-            renderRects(value, colorOption.no_color);
-            break;
-        case 'area_color':
-            renderRects(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'area_background_color':
-            renderRects(value, colorOption.bg_color);
-            renderLegend();
-            break;
-        case 'volume':
-            renderCubes(value, colorOption.no_color);
-            renderLegend();
-            break;
-        case 'volume_color':
-            renderCubes(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'volume_background_color':
-            renderCubes(value, colorOption.bg_color);
-            renderLegend();
-            break;
-        default:
-            console.log('why default???');
-            break;
-    }
-    return 1;
-}
-
 function order(value) {
     return Math.floor(Math.log10(value)) + 1;
 }
@@ -543,14 +592,3 @@ function OrderLimits(value) {
         return Math.pow(10, order(value));
     }
 }
-
-$(window).resize(function() {
-    svgWidth = $('#min-div').width() - 1;
-    svgHeight = svgWidth;
-    // console.log('svgWidth: ');
-    // console.log(svgWidth);
-    // console.log('svgHeight: ');
-    // console.log(svgHeight);
-});
-
-render(qDimension, qVal);
