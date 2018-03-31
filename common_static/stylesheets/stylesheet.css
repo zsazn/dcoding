@@ -1,8 +1,8 @@
 html, body {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     font-size: 16px;
-    /*width: 1800px;*/
-    /*margin: auto;*/
+    height: 100%;
+    margin: 0;
     overflow: visible;
 }
 
@@ -12,6 +12,25 @@ canvas {
     padding: 0;
     margin: auto;
     display: block;
+}
+
+div.entrypoint {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/background.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+div.entrybtns {
+    position: absolute;
+    top: 65%;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 div.container {
@@ -24,7 +43,7 @@ div.header, div.content, div.footer {
 }
 
 div.header h2,
-div.header h3,
+/*div.header h3,*/
 div.content h2,
 div.content p {
     text-align: center;
@@ -37,12 +56,18 @@ div.footer {
 
 .header-text {
     line-height: 1.5;
+    text-align: center;
 }
 
 div.tooltip-inner {
     min-width: 100px;
     max-width: 400px;
     text-align: justify;
+}
+
+h3.q-num {
+    text-align: left;
+    padding-left: 20px;
 }
 
 input[type=number]::-webkit-outer-spin-button,
@@ -70,6 +95,47 @@ div.col {
     margin-top: 20px;
 }
 
+a.btn-entry {
+    /*margin: auto;*/
+    padding-top: 0.5em;
+    width: 300px;
+    height: 60px;
+    color: #f2f2f2;
+    border-color: #f2f2f2;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    *zoom: 1;
+    text-align: center;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    border: 2px solid;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.01);
+}
+
+a.btn-entry:hover {
+    background: #f2f2f2;
+    color: #343434;
+    border-color: #f2f2f2;
+}
+
+a.btn-admin {
+    position: absolute;
+    margin: 0 auto;
+    width: 100px;
+    height: 25px;
+    font-size: 0.75em;
+    padding-top: 0.4em;
+    left: 95%;
+    top: 1%;
+}
+
 .modal-backdrop {
     background-color: #242424;
     opacity: 1 !important;
@@ -77,4 +143,41 @@ div.col {
 
 .blur {
     -webkit-filter: blur(5px) grayscale(50%);
+}
+
+@media only screen  and (max-width: 1366px) {
+    div.entrybtns {
+        left: 12.5%;
+    }
+    a.btn-entry {
+        margin: 1em 0;
+    }
+}
+
+@media only screen  and (min-width : 1367px) and (max-width: 1440px) {
+    div.entrybtns {
+        left: 15%;
+    }
+    a.btn-entry {
+        margin: 1.5em 0;
+    }
+}
+
+@media only screen  and (min-width : 1440px) and (max-width: 1920px) {
+    div.entrybtns {
+        left: 15%;
+    }
+    a.btn-entry {
+        margin: 2em 0;
+    }
+}
+
+@media only screen  and (min-width : 1921px) {
+    div.entrybtns {
+        left: 18%;
+        top: 55%;
+    }
+    a.btn-entry {
+        margin: 2em 0;
+    }
 }

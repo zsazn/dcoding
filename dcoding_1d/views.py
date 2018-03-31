@@ -22,20 +22,15 @@ random.shuffle(QUESTION_VALUES);
 
 # Create your views here.
 class IndexView(TemplateView):
-    template_name = 'index.html'
+    template_name = '1d/index.html'
     def get(self, request):
         user_id = ''.join([random.choice(string.ascii_letters) for n in xrange(6)])
-        print 'user_id: ' + user_id
+        # print 'user_id: ' + user_id
         request.session['user_id'] = user_id
         return render(request, self.template_name, locals())
 
 class StartView(TemplateView):
     template_name = '1d/start.html'
-    def get(self, request):
-        return render(request, self.template_name)
-
-class BreakView(TemplateView):
-    template_name = 'd/break.html'
     def get(self, request):
         return render(request, self.template_name)
 
