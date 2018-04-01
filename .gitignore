@@ -102,3 +102,9 @@ ENV/
 
 # sqlite
 .slite3
+
+# media files
+.jpg
+
+# misc
+.map
