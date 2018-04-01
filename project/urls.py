@@ -24,7 +24,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', include('entrypoint.urls', namespace='entrypoint')),
+    url(r'^', include('entrypoint.urls', namespace='entrypoint')),
     url(r'', include('dcoding.urls', namespace='dcoding')),
     url(r'', include('dcoding_1d.urls', namespace='docding_1d')),
 ]

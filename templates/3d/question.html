@@ -63,8 +63,8 @@
                     <h3 class="q-num">Question {{ q.q_index }}</h3>
                 {% endif %}
             {% else %}
-                {% if q class="q-num".q_set == 1 %}
-                    <h3>Question {{ q.q_index }}</h3>
+                {% if q.q_set == 1 %}
+                    <h3 class="q-num">Question {{ q.q_index }}</h3>
                 {% elif q.q_set == 2 %}
                     <h3 class="q-num">Question {{ q.q_index|add:"5" }}</h3>
                 {% endif %}
