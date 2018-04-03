@@ -101,10 +101,13 @@ ENV/
 .mypy_cache/
 
 # sqlite
-.slite3
+.sqlite3
 
 # media files
 .jpg
 
 # misc
 .map
+settings.py
+background-Copy.png
+Thumbs.db

@@ -21,17 +21,17 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7ft0)k^=7pu3zzeg#-k(g$-=%*k@h10$i-j0%t*99j96$sc@3z'
+with open('/etc/secret_key') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'zsazn.com', 'www.zsazn.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'www.zsazn.com', 'zsazn.com']
 
 
 # Application definition
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -88,18 +88,18 @@ SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'dcoding.sqlite3'),
-    # },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dcoding',
-        'USER': 'root',
-        'PASSWORD': 'wenjie0718',
-        'HOST': '127.0.0.1',
-        'PORT': 3306,
-    },
+    #'default': {
+    #    'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': os.path.join(BASE_DIR, 'dcoding.sqlite3'),
+    #},
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'dcoding',
+         'USER': 'root',
+         'PASSWORD': 'wenjie0718!',
+         'HOST': '127.0.0.1',
+         'PORT': 3306,
+     },
 }
 
 
@@ -133,7 +133,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -153,9 +153,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Customization
 ADMINS = [('Zheng', 'zhengzhou.purdue@gmail.com')]
 
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_SSL_REDIRECT = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
-# X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'SAMEORIGIN'

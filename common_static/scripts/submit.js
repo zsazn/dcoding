@@ -31,7 +31,8 @@ function submitAnswer() {
             start_answer_time: startAnswerTime,
             submit_answer_time: submitAnswerTime,
             a_val: aVal,
-            q_val: qVal
+            q_val: qVal,
+            'csrfmiddlewaretoken': csrftoken
         },
         success: function(data) {
             if (data['success']) {

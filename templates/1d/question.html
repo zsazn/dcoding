@@ -67,7 +67,7 @@
     <div class="col" id="max-div">
     </div>
     <div class="modal fade" id="answer-modal" tabindex="-1" role="dialog"  data-backdrop="static" data-keyboard="false">
-        <form name="answer" action="" method="post">
+        <form name="answer" action="" method="post" onkeypress="return event.keyCode != 13;">
             {% csrf_token %}
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -87,7 +87,7 @@
                     </div>
         </form>
                     <div class="modal-footer" id="modal-footer">
-                        <form name="next" method="post">
+                        <form name="next" method="post" onkeypress="return event.keyCode != 13;">
                             {% csrf_token %}
                             <button class="btn btn-success" id="next-button" name="next-button" type="submit" style="visibility: hidden;">Next</button>
                         </form>
@@ -121,9 +121,5 @@
                 alert('Click to answer only after you are ready to answer!!! \n请确认您已思考完毕且完全准备好答题时再点击！');
             }, false);
         }
-        // Cookies.set('qType', qType, {expires: 7});
-        // Cookies.set('qDimension', qDimension, {expires: 7});
-        // Cookies.set('qSet', qSet, {expires: 7});
-        // Cookies.set('qIndex', qIndex, {expires: 7});
     </script>
 {% endblock endscript %}

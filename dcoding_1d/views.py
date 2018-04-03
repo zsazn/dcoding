@@ -26,7 +26,11 @@ class IndexView(TemplateView):
     def get(self, request):
         user_id = ''.join([random.choice(string.ascii_letters) for n in xrange(6)])
         # print 'user_id: ' + user_id
-        request.session['user_id'] = user_id
+        try:
+            tmp = request.session['user_id']
+        except KeyError:
+            request.session['user_id'] = user_id
+            request.session.set_expiry(0)
         return render(request, self.template_name, locals())
 
 class StartView(TemplateView):
@@ -78,7 +82,6 @@ class QuestionView(TemplateView):
             elif q_type and q_type == 'test':
                 if q_index and q_index < 5:
                     q_index += 1
-                    print q_index
                 elif q_index and q_index == 5:
                     if q_set and q_set == 1:
                         q_set += 1
@@ -86,6 +89,7 @@ class QuestionView(TemplateView):
                     elif q_set and q_set == 2:
                         q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
                         if q_dimension_index == 2:
+                            request.session.flush()
                             return HttpResponseRedirect('/dcoding-1d/end')
                         elif q_dimension_index < 2:
                             q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
@@ -102,6 +106,7 @@ class QuestionView(TemplateView):
         data = dict()
         if 'user_id' in request.session:
             a_id = request.session['user_id']
+            # print a_id
         else:
             raise Http404('No user id found.')
             return HttpResponseRedirect('/dcoding-1d/end')
@@ -114,20 +119,38 @@ class QuestionView(TemplateView):
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')
             try:
-                Answer.objects.get(q_id=q.id)
+                Answer.objects.filter(a_id=a_id)
             except ObjectDoesNotExist:
-                a = Answer(a_id=a_id, a_val=a_val, q_id=q.id, q_val=q_val,
+                a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                           q_val=q_val,
                            q_dimension=q_dimension,
                            q_set=q_set,
                            q_index=q_index,
                            a_page_loaded=loaded_time,
                            a_start_time=start_answer_time,
                            a_submit_time=submit_answer_time)
-                a.save()
             else:
-                a = Answer.objects.get(q_id=q.id)
-                a.a_val = a_val
-                a.save()
+                try:
+                    Answer.objects.filter(a_id=a_id).filter(q_id=q.id)
+                except ObjectDoesNotExist:
+                    a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                               q_val=q_val,
+                               q_dimension=q_dimension,
+                               q_set=q_set,
+                               q_index=q_index,
+                               a_page_loaded=loaded_time,
+                               a_start_time=start_answer_time,
+                               a_submit_time=submit_answer_time)
+                else:
+                    new_a = Answer(a_id=a_id, a_val=a_val, q_id=q.id,
+                                   q_val=q_val,
+                                   q_dimension=q_dimension,
+                                   q_set=q_set,
+                                   q_index=q_index,
+                                   a_page_loaded=loaded_time,
+                                   a_start_time=start_answer_time,
+                                   a_submit_time=submit_answer_time)
+                    new_a.save()
         else:
             error_msg = answer_input_obj.errors
             data['error'] = error_msg

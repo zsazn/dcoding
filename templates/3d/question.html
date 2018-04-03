@@ -103,7 +103,7 @@
                     </div>
         </form>
                     <div class="modal-footer" id="modal-footer">
-                        <form name="next" method="post">
+                        <form name="next" method="post" onkeypress="return event.keyCode != 13;">
                             {% csrf_token %}
                             <button class="btn btn-success" id="next-button" name="next-button" type="submit" style="visibility: hidden;">Next</button>
                         </form>
