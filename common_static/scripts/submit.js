@@ -28,6 +28,7 @@ function submitAnswer() {
         method: 'POST',
         data: {
             loaded_time: loadedTime,
+            access_time: accessTime,
             start_answer_time: startAnswerTime,
             submit_answer_time: submitAnswerTime,
             a_val: aVal,

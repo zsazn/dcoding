@@ -107,9 +107,9 @@
 {% block endscript %}
     <script type="text/javascript" src="{% static 'scripts/render_1d.js' %}"></script>
     <script type="text/javascript">
-        var loadedTime;
+        var loadedTime, accessTime;
         window.addEventListener('load', function(e) {
-            // loadedTime = new Date(Date.now());
+            accessTime = new Date(Date.now());
             loadedTime = Date.now();
             // console.log(new Date(Date.now()));
             // console.log('window loaded!');

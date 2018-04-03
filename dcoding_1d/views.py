@@ -118,6 +118,7 @@ class QuestionView(TemplateView):
             start_answer_time = request.POST.get('start_answer_time')
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')
+            access_time = request.POST.get('access_time')
             try:
                 Answer.objects.filter(a_id=a_id)
             except ObjectDoesNotExist:
@@ -128,7 +129,8 @@ class QuestionView(TemplateView):
                            q_index=q_index,
                            a_page_loaded=loaded_time,
                            a_start_time=start_answer_time,
-                           a_submit_time=submit_answer_time)
+                           a_submit_time=submit_answer_time,
+                           a_access_time=access_time)
             else:
                 try:
                     Answer.objects.filter(a_id=a_id).filter(q_id=q.id)
@@ -140,7 +142,8 @@ class QuestionView(TemplateView):
                                q_index=q_index,
                                a_page_loaded=loaded_time,
                                a_start_time=start_answer_time,
-                               a_submit_time=submit_answer_time)
+                               a_submit_time=submit_answer_time,
+                               a_access_time=access_time)
                 else:
                     new_a = Answer(a_id=a_id, a_val=a_val, q_id=q.id,
                                    q_val=q_val,
@@ -149,7 +152,8 @@ class QuestionView(TemplateView):
                                    q_index=q_index,
                                    a_page_loaded=loaded_time,
                                    a_start_time=start_answer_time,
-                                   a_submit_time=submit_answer_time)
+                                   a_submit_time=submit_answer_time,
+                                   a_access_time=access_time)
                     new_a.save()
         else:
             error_msg = answer_input_obj.errors
