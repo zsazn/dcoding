@@ -134,11 +134,12 @@ class QuestionView(TemplateView):
             start_answer_time = request.POST.get('start_answer_time')
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')
+            t_thinking = request.POST.get('t_thinking')
+            t_answering = request.POST.get('t_answering')
             access_time = request.POST.get('access_time')
             access_from = request.POST.get('access_from')
-            try:
-                Answer.objects.filter(a_id=a_id)
-            except ObjectDoesNotExist:
+
+            if len(Answer.objects.filter(a_id=a_id)) == 0:
                 a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
                            q_val=q_val,
                            q_dimension=q_dimension,
@@ -148,11 +149,11 @@ class QuestionView(TemplateView):
                            a_start_time=start_answer_time,
                            a_submit_time=submit_answer_time,
                            a_access_time=access_time,
-                           a_access_from=access_from)
+                           a_access_from=access_from,
+                           t_thinking=t_thinking,
+                           t_answering=t_answering)
             else:
-                try:
-                    Answer.objects.filter(a_id=a_id).filter(q_id=q.id)
-                except ObjectDoesNotExist:
+                if len(Answer.objects.filter(a_id=a_id).filter(q_id=q.id)) == 0:
                     a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
                                q_val=q_val,
                                q_dimension=q_dimension,
@@ -162,19 +163,9 @@ class QuestionView(TemplateView):
                                a_start_time=start_answer_time,
                                a_submit_time=submit_answer_time,
                                a_access_time=access_time,
-                               a_access_from=access_from)
-                else:
-                    new_a = Answer(a_id=a_id, a_val=a_val, q_id=q.id,
-                                   q_val=q_val,
-                                   q_dimension=q_dimension,
-                                   q_set=q_set,
-                                   q_index=q_index,
-                                   a_page_loaded=loaded_time,
-                                   a_start_time=start_answer_time,
-                                   a_submit_time=submit_answer_time,
-                                   a_access_time=access_time,
-                                   a_access_from=access_from)
-                    new_a.save()
+                               a_access_from=access_from,
+                               t_thinking=t_thinking,
+                               t_answering=t_answering)
         else:
             error_msg = answer_input_obj.errors
             data['error'] = error_msg

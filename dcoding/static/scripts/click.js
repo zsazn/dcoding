@@ -20,7 +20,6 @@ function clickToNextSession() {
 }
 
 function clickToAnswer() {
-    // startAnswerTime = new Date(Date.now());
     $('#answer-modal').on('show.bs.modal', function() {
         $('.col').addClass('blur');
     });
@@ -28,6 +27,4 @@ function clickToAnswer() {
         $('.col').removeClass('blur');
     });
     startAnswerTime = Date.now();
-    // console.log(new Date(startAnswerTime));
-    // console.log('Start to answer!');
 }

@@ -10,13 +10,17 @@ function csrfSafeMethod(method) {
 
 function submitAnswer() {
     let aVal = document.getElementById('input-answer').value;
-    // let submitAnswerTime = new Date(Date.now());
     let submitAnswerTime = Date.now();
 
     let url = window.location.pathname;
     let csrftoken = Cookies.get('csrftoken');
 
     let accessFrom = window.sessionStorage.getItem('accessFrom');
+    let tThinking = startAnswerTime - loadedTime;
+    let tAnswering = submitAnswerTime - startAnswerTime;
+
+    console.log(tThinking);
+    console.log(tAnswering);
 
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
@@ -29,11 +33,13 @@ function submitAnswer() {
         url: url,
         method: 'POST',
         data: {
-            loaded_time: loadedTime,
             access_time: accessTime,
             access_from: accessFrom,
+            loaded_time: loadedTime,
             start_answer_time: startAnswerTime,
             submit_answer_time: submitAnswerTime,
+            t_thinking: tThinking,
+            t_answering: tAnswering,
             a_val: aVal,
             q_val: qVal,
             'csrfmiddlewaretoken': csrftoken
@@ -43,7 +49,13 @@ function submitAnswer() {
                 let msg = document.createElement('p');
                 let val = document.getElementById('input-answer').value;
                 let title = document.getElementById('modal-title');
-                if (qType == 'pilot' || (qSet == '2' && qIndex == '5')) {
+                if (qType == 'pilot') {
+                    var msgContent = 'Your answer \
+                    <span style="color: #ff0000;"><strong>' + val + '</strong>\
+                    </span> has been submitted. <br>The actual value is \
+                    <span style="color: #ff0000;"><strong>' + qVal + '.</strong>\
+                    </span><br>Click "Next" to continue.';
+                } else if (qSet == '2' && qIndex == '5') {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
                     </span> has been submitted. <br>Click "Next" to continue.';

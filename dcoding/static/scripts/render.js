@@ -569,7 +569,7 @@ function renderCubes(value, color) {
 }
 
 function renderLegend() {
-    // let legendUnit = 100;
+    let legendUnit = 100;
     let legendRectW = 500;
     let legendRectH = 20;
     let legend = d3.select('#legend')
@@ -604,16 +604,16 @@ function renderLegend() {
           .attr('width', legendRectW)
           .attr('height', legendRectH)
           .attr('fill', 'url(#legend-linear-gradient)');
-    legend.append('text')
-          .attr('x', 0)
-          .attr('y', legendRectH * 2)
-          .attr('text-anchor', 'middle')
-          .text(qMin);
-    legend.append('text')
-          .attr('x', legendRectW)
-          .attr('y', legendRectH * 2)
-          .attr('text-anchor', 'middle')
-          .text(10000);
+    // legend.append('text')
+    //       .attr('x', 0)
+    //       .attr('y', legendRectH * 2)
+    //       .attr('text-anchor', 'middle')
+    //       .text(qMin);
+    // legend.append('text')
+    //       .attr('x', legendRectW)
+    //       .attr('y', legendRectH * 2)
+    //       .attr('text-anchor', 'middle')
+    //       .text(10000);
 
     // for (let i = 1; i < orders.length + 1; i++) {
     //     legend.append('rect')
@@ -628,21 +628,21 @@ function renderLegend() {
     //             return colorScale(i);
     //           });
     //       }
-    // for (let j = 0; j < orders.length + 1; j++) {
-    //     legend.append('text')
-    //           .attr('x', function() {
-    //             return legendUnit * j;
-    //           })
-    //           .attr('y', legendRectH * 2)
-    //           .attr('text-anchor', 'middle')
-    //           .text(function() {
-    //             if (j == 0) {
-    //                 return '1';
-    //             } else {
-    //                 return Math.pow(10, j);
-    //             }
-    //           });
-    // }
+    for (let j = 0; j < orders.length + 1; j++) {
+        legend.append('text')
+              .attr('x', function() {
+                return legendUnit * j;
+              })
+              .attr('y', legendRectH * 2)
+              .attr('text-anchor', 'middle')
+              .text(function() {
+                if (j == 0) {
+                    return '1';
+                } else {
+                    return Math.pow(10, j);
+                }
+              });
+    }
 }
 
 function order(value) {

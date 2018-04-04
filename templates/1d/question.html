@@ -14,8 +14,6 @@
     else {
         qVal = '{{ q_val }}';
     }
-    // console.log('q_val: ');
-    // console.log(qVal);
     const qMin = '{{ q.q_min }}';
     const qMax = '{{ q.q_max }}';
     window.sessionStorage.setItem('session', qDimension);
@@ -106,13 +104,12 @@
 
 {% block endscript %}
     <script type="text/javascript" src="{% static 'scripts/render_1d.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/autofocus.js' %}"></script>
     <script type="text/javascript">
         var loadedTime, accessTime;
         window.addEventListener('load', function(e) {
             accessTime = new Date(Date.now());
             loadedTime = Date.now();
-            // console.log(new Date(Date.now()));
-            // console.log('window loaded!');
         });
         if (qType == 'pilot' && qDimension == 'length') {
             let btn = document.getElementById('a-btn');

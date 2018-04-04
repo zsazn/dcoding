@@ -34,6 +34,8 @@ class Answer(models.Model):
     a_submit_time = models.CharField(max_length=255, null=True, blank=True)
     a_access_time = models.CharField(max_length=255, null=True, blank=True)
     a_access_from = models.CharField(max_length=255, null=True, blank=True)
+    t_thinking = models.CharField(max_length=255, null=True, blank=True)
+    t_answering = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return 'Answer of %s' % self.a_id + 'to question ' + str(self.q.id) + \
