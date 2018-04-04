@@ -37,7 +37,7 @@
         <p class="header-text" data-toggle="tooltip" data-placement="right" title="在这个实验中，您将完成若干组这样的任务：即请您根据图形的形状或（以及）颜色，同时对照参考值的形状与颜色，来估计其表示的数值。">
             The tasks in the testing will ask you to estimate a numerical value that the centerd graphical representation measures, while referencing the left representation measures a minimum and the one on the right measures a maximum.</p>
         <p class="header-text" data-toggle="tooltip" data-placement="right" title="在实验中，最大参考值和最小参考值分两类。一类是全局最大值和最小值，分别是1和10000。另一类是区间最大和最小值，即待估值所在数量级区间的最大和最小值。例如，待估值为3500，那么其区间最小值为1000，区间最大值为10000。">
-            The minimum and maximum could be the values in global scope, which are 1 and 10000 during the testing; Or they could be the extreme values in a local scope. For instance, if you are estimating a value of 3500, the minimum reference value in local scope is 1000 while the maximum reference value in local scope is 100000.
+            The minimum and maximum could be the values in global scope, which are 1 and 10000 during the testing; Or they could be the extreme values in a local scope. For instance, if you are estimating 3500, the minimum reference value in local scope is 1000 while the maximum reference value in local scope is 100000.
         </p>
         <p class="header-text" data-toggle="tooltip" data-placement="right" title="每个问题中，您所填写的数字和用以思考和填写的时间将被记录下来。">
             In each question, the numerical value you estimate and the time you spend on answering will be recored.
@@ -49,8 +49,8 @@
 {% block content %}
     <div class="col-2 header"></div>
     <div class="col-8 content">
-        <p style="text-align: left;" class="header-text" data-toggle="tooltip" data-placement="top" title="下图为测试题示例。左边的柱形表示1000，而右边的柱形表示10000。1000和10000分别是这个区间（1000-10000）的最小和最大极值，柱形的颜色也指示出这一区间。您需要根据这一区间，和左右的参考值，来估测中间柱形所表示的数值。正确答案是7000。">
-            The example picture shows the testing logic: the bar on the left represents 1000, and right one represents 10000. They are the extreme values in the range of 1000-10000. Such range is also shown in the legend. You'll attempt to estimate the value that the bar in the middle represents. In this case, the actual value is 7000.
+        <p style="text-align: left;" class="header-text" data-toggle="tooltip" data-placement="top" title="下图为测试题示例。左边的柱形表示1000，而右边的柱形表示10000。1000和10000分别是这个区间（1000-10000）的最小和最大极值，柱形的颜色也指示出这一区间。您需要根据这一区间，和左右的参考值，来估测中间柱形所表示的数值。正确答案是7000。"><em>>
+            The example below shows the testing logic: the bar on the left represents 1000 while the right one represents 10000. They are the extreme values in the range of 1000-10000. You'll attempt to estimate the value that the bar in the middle represents. In this case, the actual value is 7000.</em>
         </p>
         <img src="{% static 'img/example.png' %}" alt="example_image" width="1200" class="img-fluid">
     </div>

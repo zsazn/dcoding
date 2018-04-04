@@ -136,9 +136,9 @@ a.btn-admin {
     width: 100px;
     height: 25px;
     font-size: 0.75em;
-    padding-top: 0.4em;
-    left: 95%;
-    top: 1%;
+    padding-top: 0.3em;
+    right: 2%;
+    top: 2%;
 }
 
 .modal-backdrop {
