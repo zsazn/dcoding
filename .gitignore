@@ -111,5 +111,3 @@ ENV/
 settings.py
 background-Copy.png
 Thumbs.db
-**/migrations
-migrations/**
