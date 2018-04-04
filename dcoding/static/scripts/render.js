@@ -53,15 +53,18 @@ function annotate(arg) {
     p.setAttribute('data-placement', 'bottom');
     p.setAttribute('class', 'annotation')
     p.setAttribute('title', title[arg]);
-    if (qDimension.indexOf('color') == -1){
-        text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
-                    'max': 'Maximum Value Reference: <span><u><i>10000</i></u></span>',
-                    'val': 'Value Estimation?'};
-    } else {
-        text = {'min': 'Minimum Value Reference: <span><u><i>' + minLocal.toString()  + '</i></u></span>',
-                    'max': 'Maximum Value Reference: <span><u><i>' + maxLocal.toString() + '</i></u></span>',
-                    'val': 'Value Estimation?'};
-    }
+    // if (qDimension.indexOf('color') == -1){
+    //     text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
+    //                 'max': 'Maximum Value Reference: <span><u><i>10000</i></u></span>',
+    //                 'val': 'Value Estimation?'};
+    // } else {
+    //     text = {'min': 'Minimum Value Reference: <span><u><i>' + minLocal.toString()  + '</i></u></span>',
+    //                 'max': 'Maximum Value Reference: <span><u><i>' + maxLocal.toString() + '</i></u></span>',
+    //                 'val': 'Value Estimation?'};
+    // }
+    text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
+            'max': 'Maximum Value Reference: <span><u><i>10000</i></u></span>',
+            'val': 'Value Estimation?'};
     p.innerHTML = text[arg];
     document.getElementById(arg + '-div').appendChild(p);
 }
