@@ -21,7 +21,7 @@
         // console.log(qVal);
         const qMin = '{{ q.q_min }}';
         const qMax = '{{ q.q_max }}';
-        window.sessionStorage.setItem('session', qDimension);
+        // window.sessionStorage.setItem('session', qDimension);
     </script>
     {% if 'volume' in q.q_dimension %}
         <script type="text/javascript" src="{% static 'scripts/vendor/three.min.js' %}"></script>
@@ -88,7 +88,7 @@
             <div class="modal-dialog" >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Fill the answer</h5>
+                        <h5 class="modal-title" id="modal-title">Fill the answer</h5>
                         <button type="button" class="close" id="close-button" aria-label="close" onclick="closeAnswer()">
                             <span aria-hidden="true">&times;</span>
                         </button>

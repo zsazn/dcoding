@@ -18,6 +18,17 @@
 <script type="text/javascript" src="{% static 'scripts/vendor/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'scripts/vendor/d3.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'scripts/vendor/d3-scale-chromatic.v1.min.js' %}"></script>
+<script type="text/javascript" language="JavaScript" src="http://www.geoplugin.net/javascript.gp"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+{% comment %}
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116900969-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116900969-1');
+</script>
+{% endcomment %}
 </head>
 <body>
     {% block startscript %}

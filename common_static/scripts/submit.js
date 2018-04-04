@@ -16,6 +16,8 @@ function submitAnswer() {
     let url = window.location.pathname;
     let csrftoken = Cookies.get('csrftoken');
 
+    let accessFrom = window.sessionStorage.getItem('accessFrom');
+
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -29,6 +31,7 @@ function submitAnswer() {
         data: {
             loaded_time: loadedTime,
             access_time: accessTime,
+            access_from: accessFrom,
             start_answer_time: startAnswerTime,
             submit_answer_time: submitAnswerTime,
             a_val: aVal,
@@ -39,6 +42,7 @@ function submitAnswer() {
             if (data['success']) {
                 let msg = document.createElement('p');
                 let val = document.getElementById('input-answer').value;
+                let title = document.getElementById('modal-title');
                 if (qType == 'pilot' || (qSet == '2' && qIndex == '5')) {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
@@ -46,10 +50,13 @@ function submitAnswer() {
                 } else {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
-                    </span> has been submitted. <br>Click "Next" to next question.';
+                    </span> has been submitted. <br><u><i>You may take a rest \
+                    now.</i></u><br>Click "Next" to next question when you are \
+                    ready.';
                 }
                 msg.innerHTML = msgContent;
                 msg.setAttribute('id', 'submitted-msg');
+                title.innerText = 'Answer submitted!';
                 if (mb.hasChildNodes()) {
                     mb.replaceChild(msg, ig);
                 }

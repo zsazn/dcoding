@@ -17,12 +17,7 @@ QUESTION_TYPES = ['pilot', 'test']
 QUESTION_DIMENSIONS = ['length',
                        'area',
                        'volume',
-                       'length_color',
-                       'area_color',
-                       'volume_color',
-                       'length_background_color',
-                       'area_background_color',
-                       'volume_background_color']
+                       'volume_color']
 QUESTION_VALUES = [7, 75, 670, 5300, 8350]
 random.shuffle(QUESTION_VALUES);
 
@@ -105,12 +100,12 @@ class QuestionView(TemplateView):
                         q_index = 1
                     elif q_set and q_set == 2:
                         q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
-                        if q_dimension_index == 8:
+                        if q_dimension_index == 3:
                             request.session.flush()
                             return HttpResponseRedirect('/dcoding/end')
-                        elif q_dimension_index < 8:
-                            if q_dimension == 'volume' or q_dimension == 'volume_color':
-                                return HttpResponseRedirect('/dcoding/break');
+                        elif q_dimension_index < 3:
+                            # if q_dimension == 'volume' or q_dimension == 'volume_color':
+                            #     return HttpResponseRedirect('/dcoding/break');
                             q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
                             q_set = 1
                             q_index = 1
@@ -137,6 +132,7 @@ class QuestionView(TemplateView):
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')
             access_time = request.POST.get('access_time')
+            access_from = request.POST.get('access_from')
             try:
                 Answer.objects.filter(a_id=a_id)
             except ObjectDoesNotExist:
@@ -148,7 +144,8 @@ class QuestionView(TemplateView):
                            a_page_loaded=loaded_time,
                            a_start_time=start_answer_time,
                            a_submit_time=submit_answer_time,
-                           a_access_time=access_time)
+                           a_access_time=access_time,
+                           a_access_from=access_from)
             else:
                 try:
                     Answer.objects.filter(a_id=a_id).filter(q_id=q.id)
@@ -161,7 +158,8 @@ class QuestionView(TemplateView):
                                a_page_loaded=loaded_time,
                                a_start_time=start_answer_time,
                                a_submit_time=submit_answer_time,
-                               a_access_time=access_time)
+                               a_access_time=access_time,
+                               a_access_from=access_from)
                 else:
                     new_a = Answer(a_id=a_id, a_val=a_val, q_id=q.id,
                                    q_val=q_val,
@@ -171,7 +169,8 @@ class QuestionView(TemplateView):
                                    a_page_loaded=loaded_time,
                                    a_start_time=start_answer_time,
                                    a_submit_time=submit_answer_time,
-                                   a_access_time=access_time)
+                                   a_access_time=access_time,
+                                   a_access_from=access_from)
                     new_a.save()
         else:
             error_msg = answer_input_obj.errors

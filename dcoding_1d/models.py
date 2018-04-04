@@ -33,8 +33,8 @@ class Answer(models.Model):
     a_start_time = models.CharField(max_length=255, null=True, blank=True)
     a_submit_time = models.CharField(max_length=255, null=True, blank=True)
     a_access_time = models.CharField(max_length=255, null=True, blank=True)
-    a_access_ip_addr = models.CharField(max_length=255, null=True, blank=True)
+    a_access_from = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return 'Answer of %s' % self.a_id + 'to question ' + str(self.q.id) + \
-               ' accesed at ' + self.a_access_time + ' from ' + self.a_access_ip_addr
+               ' accesed at ' + self.a_access_time + ' from ' + self.a_access_from

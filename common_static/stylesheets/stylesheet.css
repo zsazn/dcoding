@@ -90,6 +90,11 @@ div.col {
     line-height: 1.5;
 }
 
+p.annotation span {
+    font-size: 22px;
+    color: #f50000;
+}
+
 .btn-primary,
 .btn-warning {
     margin-top: 20px;
