@@ -82,13 +82,13 @@ class QuestionView(TemplateView):
         if 'next-button' in request.POST:
             if q_type and q_type == 'pilot':
                 if q_dimension == 'length':
-                    q_dimension = 'area_color'
+                    q_dimension = 'area'
                     return HttpResponseRedirect(reverse('dcoding:question',
                                                 kwargs={'type': 'pilot',
-                                                        'dimension': 'area_color',
+                                                        'dimension': 'area',
                                                         'set': 1,
                                                         'index': 1}))
-                elif q_dimension == 'area_color':
+                elif q_dimension == 'area':
                     return HttpResponseRedirect('/dcoding/start')
             elif q_type and q_type == 'test':
                 if q_index and q_index < 5:
@@ -127,7 +127,10 @@ class QuestionView(TemplateView):
             answer = answer_input_obj.clean()
             a_val = answer['a_val']
             data['success'] = a_val
-            q_val = request.POST.get('q_val')
+            if 'volume' in q_dimension:
+                q_val = str(int(request.POST.get('q_val'))*10000/15625)
+            else:
+                q_val = request.POST.get('q_val')
             start_answer_time = request.POST.get('start_answer_time')
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')

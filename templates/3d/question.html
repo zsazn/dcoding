@@ -43,7 +43,7 @@
         {% if q.q_type == 'pilot' %}
             {% if q.q_dimension == 'length' %}
                 <h2 id="test">Warm yourself up!</h2>
-            {% elif q.q_dimension == 'area_color' %}
+            {% elif q.q_dimension == 'area' %}
                 <h2>Another one!</h2>
             {% endif %}
         {% elif q.q_type == 'test' %}
@@ -122,6 +122,7 @@
 
 {% block endscript %}
     <script type="text/javascript" src="{% static 'scripts/render.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/autofocus.js' %}"></script>
     <script type="text/javascript">
         var loadedTime, accessTime;
         window.addEventListener('load', function(e) {
@@ -137,5 +138,6 @@
                 alert('Click to answer only after you are ready to answer!!! \n请确认您已思考完毕且完全准备好答题时再点击！');
             }, false);
         }
+
     </script>
 {% endblock endscript %}

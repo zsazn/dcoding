@@ -19,8 +19,14 @@ var canvasSize = 600;
 
 const frustumSize = 1000;
 
-let colorScale = d3.scaleOrdinal(d3.schemeBlues[orderNum]).domain(orders);
-let fillColor = colorScale(order(qVal));
+// let colorScale = d3.scaleOrdinal(d3.schemeBlues[orderNum]).domain(orders);
+// let fillColor = colorScale(order(qVal));
+
+// let colorScale = d3.scaleSequential(d3.interpolateBlues);
+
+const minColor = '#d4e4f4',
+      maxColor = '#08306b';
+let colorScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
 
 const args = ['min', 'max', 'val'];
 const strokeColor = '#ff0000';
@@ -133,6 +139,10 @@ function renderBars(value, color) {
     document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
     document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
 
+    let min = qMin,
+        max = qMax,
+        val = value;
+
     let barWidth = 5,
         minH = 5,
         maxH = 500;
@@ -141,6 +151,9 @@ function renderBars(value, color) {
         maxLocalH = minH + (maxLocal - qMin) / (qMax - qMin) * (maxH - minH),
         valLocalH = valH;
     function renderBar(arg) {
+        let data = eval(arg);
+        let fillColor = colorScale(data/qMax);
+
         let g = d3.select('#' + arg + '-svg')
                     .append('g')
                     .attr('id', arg + '-g')
@@ -209,6 +222,10 @@ function renderRects(value, color) {
     document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
     document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
 
+    let min = qMin,
+        max = qMax,
+        val = value;
+
     let normW = 5,
         normH = 5,
         fullW = 500,
@@ -224,6 +241,9 @@ function renderRects(value, color) {
         ratio = maxH / normH;
 
     function renderRect(arg) {
+        let data = eval(arg);
+        let fillColor = colorScale(data/qMax);
+
         d3.select('#' + arg +'-svg')
           .append('g')
           .attr('id', arg + '-g')
@@ -394,16 +414,20 @@ function renderCubes(value, color) {
                 gridColor = 0xd3d3d3,
                 axesSize = 500,
                 matColor, backgroundColor;
+            let data = eval(arg);
+
             if (color == 0) {
                 matColor = 0xf0f0f0,
                 backgroundColor = 0xffffff;
             } else if (color == 1) {
-                matColor = fillColor,
+                matColor = colorScale(data/qMax);
                 backgroundColor = 0xffffff;
-            } else if (color == -1) {
-                matColor = 0xf0f0f0,
-                backgroundColor = fillColor;
             }
+            // else if (color == -1) {
+            //     matColor = 0xf0f0f0,
+            //     backgroundColor = fillColor;
+            // }
+
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(backgroundColor);
@@ -454,12 +478,14 @@ function renderCubes(value, color) {
             parEle.appendChild(renderer.domElement);
             window.addEventListener('resize', onWindowResize, false);
 
-            if (color == 0) {
-                createAll(arg);
-            } else {
-                arg = arg + 'Local';
-                createAll(arg);
-            }
+            // if (color == 0) {
+            //     createAll(arg);
+            // } else {
+            //     arg = arg + 'Local';
+            //     createAll(arg);
+            // }
+
+            createAll(arg);
 
             function createObj(arg, deltaX, deltaY, deltaZ) {
                 let meshClone = mesh.clone(),
@@ -540,8 +566,9 @@ function renderCubes(value, color) {
 }
 
 function renderLegend() {
-    let legendUnit = 100;
-    let legendRectH = 30;
+    // let legendUnit = 100;
+    let legendRectW = 500;
+    let legendRectH = 20;
     let legend = d3.select('#legend')
                    .append('svg')
                    .attr('id', 'legend-svg')
@@ -551,34 +578,68 @@ function renderLegend() {
                    .attr('id', 'legend-g')
                    .attr('transform', 'translate(50,0)');
     document.getElementById('legend-svg').setAttribute('viewbox', '0 0 600 100');
-    for (let i = 1; i < orders.length + 1; i++) {
-        legend.append('rect')
-              .attr('id', 'legend_' + i)
-              .attr('x', function() {
-                return legendUnit * (i - 1);
-              })
-              .attr('y', margin.top)
-              .attr('width', legendUnit)
-              .attr('height', legendRectH)
-              .attr('fill', function() {
-                return colorScale(i);
-              });
-          }
-    for (let j = 0; j < orders.length + 1; j++) {
-        legend.append('text')
-              .attr('x', function() {
-                return legendUnit * j;
-              })
-              .attr('y', legendRectH * 2)
-              .attr('text-anchor', 'middle')
-              .text(function() {
-                if (j == 0) {
-                    return '1';
-                } else {
-                    return Math.pow(10, j);
-                }
-              });
-    }
+    var lg = legend.append('defs')
+                   .append('linearGradient')
+                   .attr('id', 'legend-linear-gradient')
+                   .attr('x1', '0%')
+                   .attr('y1', '0%')
+                   .attr('x2', '100%')
+                   .attr('y2', '0%')
+                   .attr('spreadMethod', 'pad');
+    lg.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', d3.rgb(minColor))
+      .attr('stop-opacity', 1);
+    lg.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', d3.rgb(maxColor))
+      .attr('stop-opacity', 1);
+    legend.append('rect')
+          .attr('id', 'legend_rect')
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('width', legendRectW)
+          .attr('height', legendRectH)
+          .attr('fill', 'url(#legend-linear-gradient)');
+    legend.append('text')
+          .attr('x', 0)
+          .attr('y', legendRectH * 2)
+          .attr('text-anchor', 'middle')
+          .text(qMin);
+    legend.append('text')
+          .attr('x', legendRectW)
+          .attr('y', legendRectH * 2)
+          .attr('text-anchor', 'middle')
+          .text(10000);
+
+    // for (let i = 1; i < orders.length + 1; i++) {
+    //     legend.append('rect')
+    //           .attr('id', 'legend_' + i)
+    //           .attr('x', function() {
+    //             return legendUnit * (i - 1);
+    //           })
+    //           .attr('y', margin.top)
+    //           .attr('width', legendUnit)
+    //           .attr('height', legendRectH)
+    //           .attr('fill', function() {
+    //             return colorScale(i);
+    //           });
+    //       }
+    // for (let j = 0; j < orders.length + 1; j++) {
+    //     legend.append('text')
+    //           .attr('x', function() {
+    //             return legendUnit * j;
+    //           })
+    //           .attr('y', legendRectH * 2)
+    //           .attr('text-anchor', 'middle')
+    //           .text(function() {
+    //             if (j == 0) {
+    //                 return '1';
+    //             } else {
+    //                 return Math.pow(10, j);
+    //             }
+    //           });
+    // }
 }
 
 function order(value) {
