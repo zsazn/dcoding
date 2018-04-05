@@ -11,17 +11,14 @@
         if (qType == 'pilot' && qDimension == 'length') {
             qVal = 300;
         }
-        else if (qType == 'pilot' && qDimension == 'area_color') {
+        else if (qType == 'pilot' && qDimension == 'area') {
             qVal = 6666;
         }
         else {
             qVal = '{{ q_val }}';
         }
-        // console.log('q_val: ');
-        // console.log(qVal);
         const qMin = '{{ q.q_min }}';
         const qMax = '{{ q.q_max }}';
-        // window.sessionStorage.setItem('session', qDimension);
     </script>
     {% if 'volume' in q.q_dimension %}
         <script type="text/javascript" src="{% static 'scripts/vendor/three.min.js' %}"></script>

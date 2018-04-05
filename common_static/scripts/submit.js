@@ -19,9 +19,6 @@ function submitAnswer() {
     let tThinking = startAnswerTime - loadedTime;
     let tAnswering = submitAnswerTime - startAnswerTime;
 
-    console.log(tThinking);
-    console.log(tAnswering);
-
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -62,8 +59,8 @@ function submitAnswer() {
                 } else {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
-                    </span> has been submitted. <br><u><i>You may take a rest \
-                    now.</i></u><br>Click "Next" to next question when you are \
+                    </span> has been submitted. <br><u><i>You may take a rest. \
+                    </i></u><br>Click "Next" to next question when you are \
                     ready.';
                 }
                 msg.innerHTML = msgContent;
