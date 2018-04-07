@@ -33,7 +33,7 @@ class Answer(models.Model):
     a_start_time = models.CharField(max_length=255, null=True, blank=True)
     a_submit_time = models.CharField(max_length=255, null=True, blank=True)
     a_access_time = models.CharField(max_length=255, null=True, blank=True)
-    a_access_from = models.CharField(max_length=255, null=True, blank=True)
+    # a_access_from = models.CharField(max_length=255, null=True, blank=True)
     t_thinking = models.CharField(max_length=255, null=True, blank=True)
     t_answering = models.CharField(max_length=255, null=True, blank=True)
 

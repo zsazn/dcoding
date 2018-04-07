@@ -15,9 +15,13 @@ function submitAnswer() {
     let url = window.location.pathname;
     let csrftoken = Cookies.get('csrftoken');
 
-    let accessFrom = window.sessionStorage.getItem('accessFrom');
+    // let accessFrom = window.sessionStorage.getItem('accessFrom');
     let tThinking = startAnswerTime - loadedTime;
     let tAnswering = submitAnswerTime - startAnswerTime;
+
+    let t1 = new Date(loadedTime);
+    let t2 = new Date(startAnswerTime);
+    let t3 = new Date(submitAnswerTime);
 
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
@@ -31,10 +35,10 @@ function submitAnswer() {
         method: 'POST',
         data: {
             access_time: accessTime,
-            access_from: accessFrom,
-            loaded_time: loadedTime,
-            start_answer_time: startAnswerTime,
-            submit_answer_time: submitAnswerTime,
+            // access_from: accessFrom,
+            loaded_time: t1,
+            start_answer_time: t2,
+            submit_answer_time: t3,
             t_thinking: tThinking,
             t_answering: tAnswering,
             a_val: aVal,

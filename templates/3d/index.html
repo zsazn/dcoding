@@ -7,18 +7,18 @@
         if (!Detector.webgl) {
             alert('The web browser you are using does not support WebGL. \nPlease change to other most updated modern browser');
             window.location.href = 'dcoding/end';
-        } else {
-            var accessFrom;
-            if (typeof geoplugin_status === 'function') {
-                var geo_status = geoplugin_status();
-                if (geo_status == '200') {
-                    var geo_city = geoplugin_city();
-                    var geo_region = geoplugin_regionName();
-                    var geo_country = geoplugin_countryName();
-                    accessFrom = geo_city + ', ' + geo_region + ', ' + geo_country;
-                    window.sessionStorage.setItem('accessFrom', accessFrom);
-                }
-            }
+        // } else {
+            // var accessFrom;
+            // if (typeof geoplugin_status === 'function') {
+            //     var geo_status = geoplugin_status();
+            //     if (geo_status == '200') {
+            //         var geo_city = geoplugin_city();
+            //         var geo_region = geoplugin_regionName();
+            //         var geo_country = geoplugin_countryName();
+            //         accessFrom = geo_city + ', ' + geo_region + ', ' + geo_country;
+            //         window.sessionStorage.setItem('accessFrom', accessFrom);
+            //     }
+            // }
         }
     </script>
 {% endblock startscript %}

@@ -8,6 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from dcoding_1d.models import Question, Answer
 from dcoding_1d.forms import AnswerForm
@@ -48,6 +50,7 @@ class QuestionView(TemplateView):
     template_name = '1d/question.html'
     context_object_name = 'questions'
 
+    @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         try:
             q = get_object_or_404(Question,
@@ -66,6 +69,7 @@ class QuestionView(TemplateView):
         form = AnswerForm()
         return render(request, self.template_name, locals())
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         q = get_object_or_404(Question,
                               q_type=kwargs['type'],
@@ -121,7 +125,7 @@ class QuestionView(TemplateView):
             t_thinking = request.POST.get('t_thinking')
             t_answering = request.POST.get('t_answering')
             access_time = request.POST.get('access_time')
-            access_from = request.POST.get('access_from')
+            # access_from = request.POST.get('access_from')
 
             if len(Answer.objects.filter(a_id=a_id)) == 0:
                 a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
@@ -133,7 +137,7 @@ class QuestionView(TemplateView):
                            a_start_time=start_answer_time,
                            a_submit_time=submit_answer_time,
                            a_access_time=access_time,
-                           a_access_from=access_from,
+                           # a_access_from=access_from,
                            t_thinking=t_thinking,
                            t_answering=t_answering)
             else:
@@ -147,7 +151,7 @@ class QuestionView(TemplateView):
                                a_start_time=start_answer_time,
                                a_submit_time=submit_answer_time,
                                a_access_time=access_time,
-                               a_access_from=access_from,
+                               # a_access_from=access_from,
                                t_thinking=t_thinking,
                                t_answering=t_answering)
         else:

@@ -108,7 +108,12 @@
     <script type="text/javascript">
         var loadedTime, accessTime;
         window.addEventListener('load', function(e) {
-            accessTime = new Date(Date.now());
+            if (sessionStorage.getItem('access_time') == null) {
+                accessTime = new Date(Date.now());
+                sessionStorage.setItem('access_time', accessTime);
+            } else {
+                accessTime = sessionStorage.getItem('access_time');
+            }
             loadedTime = Date.now();
         });
         if (qType == 'pilot' && qDimension == 'length') {
