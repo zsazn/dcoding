@@ -31,7 +31,7 @@ with open('/etc/secret_key') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'www.zsazn.com', 'zsazn.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'dc.zsazn.com', 'www.dc.zsazn.com']
 
 
 # Application definition

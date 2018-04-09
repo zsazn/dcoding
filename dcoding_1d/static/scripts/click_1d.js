@@ -3,11 +3,11 @@
 var startAnswerTime;
 
 function clickToPractice() {
-    window.location.href='dcoding-1d/question/pilot/length/1/1';
+    window.location.href='dcoding-1d/question/pilot/length_local/1/1';
 }
 
 function clickToStart() {
-    window.location.href='question/test/length/1/1';
+    window.location.href='question/test/length_global/1/1';
 }
 
 function clickToAnswer() {

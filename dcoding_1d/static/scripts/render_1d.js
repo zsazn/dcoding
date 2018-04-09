@@ -8,63 +8,130 @@ var legendWidth = svgWidth;
 var legendHeight = 80;
 var margin = {'top': 10, 'bottom': 20, 'left': 10, 'right': 10};
 
-const orderNum = 5;
-const orders = [1, 2, 3, 4, 5];
+const orders = [1, 2, 3, 4];
 
 const viewWidth = 600,
       viewHeight = 600;
 
-let colorScale = d3.scaleOrdinal(d3.schemeBlues[orderNum]).domain(orders);
-const fillColor = colorScale(order(qVal));
-
+const minColor = '#d4e4f4',
+      maxColor = '#08306b';
+let colorScaleGlobal = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
+let colorScaleLocal = d3.scaleOrdinal()
+                        .domain(orders)
+                        .range([minColor,
+                                colorScaleGlobal(0.5),
+                                colorScaleGlobal(0.75),
+                                maxColor]);
 
 const args = ['min', 'max', 'val'];
 
 const orderLimits = new OrderLimits(qVal);
 const minLocal = orderLimits.min();
 const maxLocal = orderLimits.max();
+const valLocal = qVal;
 
-d3.select('#min-div')
-  .append('svg')
-  .attr('id', 'min-svg')
-  .attr('width', svgWidth)
-  .attr('height', svgHeight);
+render(qDimension, qVal);
 
-d3.select('#max-div')
-  .append('svg')
-  .attr('id', 'max-svg')
-  .attr('width', svgWidth)
-  .attr('height', svgHeight);
-
-d3.select('#val-div')
-  .append('svg')
-  .attr('id', 'val-svg')
-  .attr('width', svgWidth)
-  .attr('height', svgHeight);
-
-document.getElementById('min-svg').setAttribute('viewbox', '0 0 600 600');
-document.getElementById('max-svg').setAttribute('viewbox', '0 0 600 600');
-document.getElementById('val-svg').setAttribute('viewbox', '0 0 600 600');
-
-if (qDimension == 'length'){
-    document.getElementById('min-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最小参考值">Minimum Value Reference: ' + qMin + '</p>';
-    document.getElementById('max-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最大参考值">Maximum Value Reference: ' + qMax + '</p>';
-    document.getElementById('val-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="请估计所表示数值">Value estimation?</p>';
-} else {
-    document.getElementById('min-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最小参考值">Minimum Value Reference: ' + minLocal + '</p>';
-    document.getElementById('max-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="最大参考值">Maximum Value Reference: ' + (maxLocal + 1) + '</p>';
-    document.getElementById('val-div').innerHTML += '<p data-toggle="tooltip" data-placement="bottom" title="请估计所表示数值">Value estimation?</p>';
+for (let i = 0; i < args.length; i++) {
+    annotate(args[i]);
 }
 
-function renderBars(value, color) {
-    let barWidth = 20,
+function annotate(arg) {
+    let p = document.createElement('p'),
+        title = {'min': '最小参考值', 'max': '最大参考值', 'val': '请估计所表示数值'},
+        text;
+    p.setAttribute('data-toggle', 'tooltip');
+    p.setAttribute('data-placement', 'bottom');
+    p.setAttribute('class', 'annotation')
+    p.setAttribute('title', title[arg]);
+    if (qDimension.indexOf('global') != -1) {
+        text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
+                'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
+                'val': 'Value Estimation?'};
+    } else {
+        text = {'min': 'Minimum Value Reference: <span><u><i>' + minLocal.toString() + '</i></u></span>',
+                'max': 'Maximum Value Reference: <span><u><i>' + maxLocal.toString() + '</i></u></span>',
+                'val': 'Value Estimation?'};
+            }
+    p.innerHTML = text[arg];
+    document.getElementById(arg + '-div').appendChild(p);
+}
+
+$(window).resize(function() {
+    svgWidth = $('#min-div').width() - 1;
+    svgHeight = svgWidth;
+});
+
+function render(dimension, value) {
+    let colorOption = {'color': 1, 'bg_color': -1};
+    let extremeOption = {'global': 0, 'local': 1};
+    switch(dimension) {
+        case 'length_global':
+            renderBars(value, extremeOption.global, colorOption.color);
+            renderLegend();
+            break;
+        case 'length_local':
+            renderBars(value, extremeOption.local, colorOption.color);
+            renderLegend();
+            break;
+        case 'length_global_background_color':
+            renderBars(value, extremeOption.global, colorOption.bg_color);
+            renderLegend();
+            break;
+        case 'length_local_background_color':
+            renderBars(value, extremeOption.local, colorOption.bg_color);
+            renderLegend();
+            break;
+        default:
+            console.log('why default???');
+            break;
+    }
+    return 1;
+}
+
+function renderBars(value, extreme, color) {
+    d3.select('#min-div')
+      .append('svg')
+      .attr('id', 'min-svg')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight);
+
+    d3.select('#max-div')
+      .append('svg')
+      .attr('id', 'max-svg')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight);
+
+    d3.select('#val-div')
+      .append('svg')
+      .attr('id', 'val-svg')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight);
+
+    document.getElementById('min-svg').setAttribute('viewbox', '0 0 600 600');
+    document.getElementById('max-svg').setAttribute('viewbox', '0 0 600 600');
+    document.getElementById('val-svg').setAttribute('viewbox', '0 0 600 600');
+
+    let min = qMin,
+        max = qMax,
+        val = value;
+
+    let barWidth = 5,
         minH = 1,
         maxH = 500,
         valH;
+    if (value < 20) {
+        valH = 20;
+    } else {
+        valH = Math.floor(value / 20) * minH;
+    }
     let minLocalH = new LocalHeight(minLocal, maxH),
         maxLocalH = new LocalHeight(maxLocal, maxH),
         valLocalH = new LocalHeight(qVal, maxH);
     function renderBar(arg) {
+        let data = eval(arg);
+        let fillColor = colorScaleGlobal(data/qMax);
+
         valH = minH + (value - qMin) / (qMax - qMin) * (maxH - minH);
         var bar = d3.select('#' + arg + '-svg')
                     .append('g')
@@ -82,9 +149,16 @@ function renderBars(value, color) {
                     .attr('height', function() {
                             return eval(arg + 'H');
                     })
-                    .attr('fill', '#000000');
+                    .attr('fill', fillColor);
+        if (color == -1) {
+            bar.attr('fill', '#000000');
+            d3.select('#' + arg + '-svg')
+              .style('background-color', fillColor);
+        }
     }
     function renderBarLocal(arg, color) {
+        let fillColor = colorScaleLocal(order(value));
+
         var bar = d3.select('#' + arg + '-svg')
                     .append('g')
                     .attr('id', arg + '-g')
@@ -103,9 +177,7 @@ function renderBars(value, color) {
                         let height = eval(arg + 'LocalH');
                         return height.get();
                     })
-                    .attr('fill', function() {
-                        return colorScale(order(value));
-                    });
+                    .attr('fill', fillColor);
         if (color == -1) {
             bar.attr('fill', '#000000');
             d3.select('#' + arg + '-svg')
@@ -113,13 +185,12 @@ function renderBars(value, color) {
         }
     }
     for (let i = 0; i < args.length; i++) {
-        if (color == 0) {
+        if (extreme == 0) {
             renderBar(args[i]);
-        } else if (color == 1 || color == -1) {
+        } else if (extreme == 1) {
             renderBarLocal(args[i], color);
         }
     }
-    // console.log('rendered bar');
 }
 
 function renderLegend() {
@@ -132,7 +203,7 @@ function renderLegend() {
                    .attr('height', legendHeight)
                    .append('g')
                    .attr('id', 'legend-g')
-                   .attr('transform', 'translate(50,0)');
+                   .attr('transform', 'translate(100,0)');
     document.getElementById('legend-svg').setAttribute('viewbox', '0 0 600 100');
     for (let i = 1; i < orders.length + 1; i++) {
         legend.append('rect')
@@ -144,7 +215,7 @@ function renderLegend() {
               .attr('width', legendUnit)
               .attr('height', legendRectH)
               .attr('fill', function() {
-                return colorScale(i);
+                return colorScaleLocal(i);
               });
           }
     for (let j = 0; j < orders.length + 1; j++) {
@@ -162,27 +233,6 @@ function renderLegend() {
                 }
               });
     }
-}
-
-function render(dimension, value) {
-    let colorOption = {'no_color': 0, 'color': 1, 'bg_color': -1};
-    switch(dimension) {
-        case 'length':
-            renderBars(value, colorOption.no_color);
-            break;
-        case 'length_color':
-            renderBars(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'length_background_color':
-            renderBars(value, colorOption.bg_color);
-            renderLegend();
-            break;
-        default:
-            console.log('why default???');
-            break;
-    }
-    return 1;
 }
 
 function order(value) {
@@ -209,14 +259,3 @@ function LocalHeight(value, maxH) {
         return _height;
     }
 }
-
-$(window).resize(function() {
-    svgWidth = $('#min-div').width() - 1;
-    svgHeight = svgWidth;
-    // console.log('svgWidth: ');
-    // console.log(svgWidth);
-    // console.log('svgHeight: ');
-    // console.log(svgHeight);
-});
-
-render(qDimension, qVal);

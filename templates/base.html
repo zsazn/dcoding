@@ -43,7 +43,7 @@
             {% block content %}
             {% endblock content %}
         </div>
-        {% if "color" in q.q_dimension %}
+        {% if "color" in q.q_dimension or "global" in q.q_dimension or "local" in q.q_dimension %}
             <div class="row legend">
                 <div class="col"></div>
                 <div class="col" id="legend"></div>

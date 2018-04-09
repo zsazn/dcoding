@@ -16,9 +16,10 @@ from dcoding_1d.forms import AnswerForm
 import random, string
 
 QUESTION_TYPES = ['pilot', 'test']
-QUESTION_DIMENSIONS = ['length',
-                       'length_color',
-                       'length_background_color']
+QUESTION_DIMENSIONS = ['length_global',
+                       'length_local',
+                       'length_global_background_color',
+                       'length_local_background_color']
 QUESTION_VALUES = [7, 75, 670, 5300, 8350]
 random.shuffle(QUESTION_VALUES);
 
@@ -87,18 +88,14 @@ class QuestionView(TemplateView):
                 if q_index and q_index < 5:
                     q_index += 1
                 elif q_index and q_index == 5:
-                    if q_set and q_set == 1:
-                        q_set += 1
+                    q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
+                    if q_dimension_index == 3:
+                        request.session.flush()
+                        return HttpResponseRedirect('/dcoding-1d/end')
+                    elif q_dimension_index < 3:
+                        q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
+                        q_set = 1
                         q_index = 1
-                    elif q_set and q_set == 2:
-                        q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
-                        if q_dimension_index == 2:
-                            request.session.flush()
-                            return HttpResponseRedirect('/dcoding-1d/end')
-                        elif q_dimension_index < 2:
-                            q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
-                            q_set = 1
-                            q_index = 1
                 else:
                     raise Http404('Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding_1d:question',

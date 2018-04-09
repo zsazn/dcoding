@@ -99,20 +99,16 @@ class QuestionView(TemplateView):
                     q_index += 1
                     # print q_index
                 elif q_index and q_index == 5:
-                    if q_set and q_set == 1:
-                        q_set += 1
-                        q_index = 1
-                    elif q_set and q_set == 2:
-                        q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
-                        if q_dimension_index == 3:
-                            request.session.flush()
-                            return HttpResponseRedirect('/dcoding/end')
-                        elif q_dimension_index < 3:
-                            # if q_dimension == 'volume' or q_dimension == 'volume_color':
-                            #     return HttpResponseRedirect('/dcoding/break');
-                            q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
-                            q_set = 1
-                            q_index = 1
+                      q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
+                      if q_dimension_index == 3:
+                          request.session.flush()
+                          return HttpResponseRedirect('/dcoding/end')
+                      elif q_dimension_index < 3:
+                          # if q_dimension == 'volume' or q_dimension == 'volume_color':
+                          #     return HttpResponseRedirect('/dcoding/break');
+                          q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
+                          q_set = 1
+                          q_index = 1
                 else:
                     raise Http404('Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding:question',

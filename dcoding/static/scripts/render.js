@@ -29,9 +29,6 @@ const minColor = '#d4e4f4',
 let colorScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
 
 const args = ['min', 'max', 'val'];
-const strokeColor = '#ff0000';
-const localStrokeColor = '#000000';
-const strokeWidth = 1;
 
 const orderLimits = new OrderLimits(qVal);
 const minLocal = orderLimits.min();
@@ -53,17 +50,8 @@ function annotate(arg) {
     p.setAttribute('data-placement', 'bottom');
     p.setAttribute('class', 'annotation')
     p.setAttribute('title', title[arg]);
-    // if (qDimension.indexOf('color') == -1){
-    //     text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
-    //                 'max': 'Maximum Value Reference: <span><u><i>10000</i></u></span>',
-    //                 'val': 'Value Estimation?'};
-    // } else {
-    //     text = {'min': 'Minimum Value Reference: <span><u><i>' + minLocal.toString()  + '</i></u></span>',
-    //                 'max': 'Maximum Value Reference: <span><u><i>' + maxLocal.toString() + '</i></u></span>',
-    //                 'val': 'Value Estimation?'};
-    // }
     text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
-            'max': 'Maximum Value Reference: <span><u><i>10000</i></u></span>',
+            'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
             'val': 'Value Estimation?'};
     p.innerHTML = text[arg];
     document.getElementById(arg + '-div').appendChild(p);
@@ -77,39 +65,19 @@ $(window).resize(function() {
 });
 
 function render(dimension, value) {
-    let colorOption = {'no_color': 0, 'color': 1, 'bg_color': -1};
+    let colorOption = {'no_color': 0, 'color': 1};
     switch(dimension) {
         case 'length':
             renderBars(value, colorOption.no_color);
             break;
-        case 'length_color':
-            renderBars(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'length_background_color':
-            renderBars(value, colorOption.bg_color);
-            renderLegend();
-            break;
         case 'area':
             renderRects(value, colorOption.no_color);
-            break;
-        case 'area_color':
-            renderRects(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'area_background_color':
-            renderRects(value, colorOption.bg_color);
-            renderLegend();
             break;
         case 'volume':
             renderCubes(value, colorOption.no_color);
             break;
         case 'volume_color':
             renderCubes(value, colorOption.color);
-            renderLegend();
-            break;
-        case 'volume_background_color':
-            renderCubes(value, colorOption.bg_color);
             renderLegend();
             break;
         default:
@@ -120,110 +88,64 @@ function render(dimension, value) {
 }
 
 function renderBars(value, color) {
-    d3.select('#min-div')
-      .append('svg')
-      .attr('id', 'min-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    d3.select('#max-div')
-      .append('svg')
-      .attr('id', 'max-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    d3.select('#val-div')
-      .append('svg')
-      .attr('id', 'val-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    document.getElementById('min-svg').setAttribute('viewBox', '0 0 600 600');
-    document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
-    document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
-
     let min = qMin,
         max = qMax,
         val = value;
 
     let barWidth = 5,
-        minH = 5,
-        maxH = 500;
-    let valH = minH + (value - qMin) / (qMax - qMin) * (maxH - minH),
-        minLocalH = minH + (minLocal - qMin) / (qMax - qMin) * (maxH - minH),
-        maxLocalH = minH + (maxLocal - qMin) / (qMax - qMin) * (maxH - minH),
-        valLocalH = valH;
-    function renderBar(arg) {
-        let data = eval(arg);
-        let fillColor = colorScale(data/qMax);
+        minH = 1,
+        maxH = 500,
+        valH;
+    if (value <= 20) {
+        valH = minH;
+    } else {
+        valH = Math.floor(value / 20) * minH;
+    }
 
+    let fillColor = '#888888';
+    // let strokeColor = '#000000';
+
+    for (let i = 0; i < args.length; i++){
+        d3.select('#' + args[i] +'-div')
+          .append('svg')
+          .attr('id', args[i] + '-svg')
+          .attr('width', svgWidth)
+          .attr('height', svgHeight);
+        document.getElementById(args[i] + '-svg').setAttribute('viewBox', '0 0 600 600');
+        renderBar(args[i]);
+      }
+
+    function renderBar(arg) {
         let g = d3.select('#' + arg + '-svg')
                     .append('g')
                     .attr('id', arg + '-g')
                     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-        if (color == 0) {
-            g.append('rect')
-             .attr('id', arg + '-bar')
-             .attr('x', function() {
-                return (viewWidth - barWidth) / 2;
-             })
-             .attr('y', function() {
-                return viewHeight - eval(arg + 'H') - margin.bottom;
-             })
-             .attr('width', barWidth)
-             .attr('height', function() {
-                return eval(arg + 'H');
-             })
-             .attr('fill', '#000000');
-        } else {
-            g.append('rect')
-             .attr('id', arg + '-bar')
-             .attr('x', function() {
-                return (viewWidth - barWidth) / 2;
-             })
-             .attr('y', function() {
-                return viewHeight - eval(arg + 'LocalH') - margin.bottom;
-             })
-             .attr('width', barWidth)
-             .attr('height', function() {
-                return eval(arg + 'LocalH');
-             })
-             .attr('fill', fillColor)
-        }
-        if (color == -1) {
-            d3.select('#' + arg + '-bar')
-              .attr('fill', '#000000');
-            d3.select('#' + arg + '-svg')
-              .style('background-color', fillColor);
-        }
-    }
-    for (let i = 0; i < args.length; i++) {
-        renderBar(args[i]);
+        g.append('rect')
+         .attr('id', arg + '-bar')
+         .attr('x', function() {
+            return (viewWidth - barWidth) / 2;
+         })
+         .attr('y', function() {
+            return viewHeight - eval(arg + 'H') - margin.bottom;
+         })
+         .attr('width', barWidth)
+         .attr('height', function() {
+            return eval(arg + 'H');
+         })
+         .attr('fill', fillColor);
+         // .attr('stroke', strokeColor);
     }
 }
 
 function renderRects(value, color) {
-    d3.select('#min-div')
-      .append('svg')
-      .attr('id', 'min-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    d3.select('#max-div')
-      .append('svg')
-      .attr('id', 'max-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    d3.select('#val-div')
-      .append('svg')
-      .attr('id', 'val-svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight);
-
-    document.getElementById('min-svg').setAttribute('viewBox', '0 0 600 600');
-    document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
-    document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
+    for (let i = 0; i < args.length; i++){
+        d3.select('#' + args[i] +'-div')
+          .append('svg')
+          .attr('id', args[i] + '-svg')
+          .attr('width', svgWidth)
+          .attr('height', svgHeight);
+        document.getElementById(arg + '-svg').setAttribute('viewBox', '0 0 600 600');
+      }
 
     let min = qMin,
         max = qMax,
@@ -231,169 +153,126 @@ function renderRects(value, color) {
 
     let normW = 5,
         normH = 5,
+        gridW = 50,
+        gridH = 50,
         fullW = 500,
         fullH = 500;
-    let minH = normH,
-        maxH = fullH * (fullH / normH),
-        valH = Math.floor(minH + (value - qMin) / (qMax - qMin) * (maxH - minH));
-    let minLocalH = minH + (minLocal - qMin) / (qMax - qMin) * (maxH - minH),
-        maxLocalH = minH + (maxLocal - qMin) / (qMax - qMin) * (maxH - minH),
-        valLocalH = valH;
+    let minW = normW,
+        minH = normH,
+        maxW = fullW,
+        maxH = fullH,
+        valW, valH,
+        valMajorW, valMajorH,
+        valMinorW, valMinorH,
+        valTMajorW, valTMajorH;
     let x = (viewWidth - fullW) / 2,
-        y = (viewHeight - fullH) / 2,
-        ratio = maxH / normH;
+        y = (viewHeight + fullH) / 2;
 
-    function renderRect(arg) {
-        let data = eval(arg);
-        let fillColor = colorScale(data/qMax);
+    let fillColor = '#888888';
+    // let strokeColor = '#000000';
 
-        d3.select('#' + arg +'-svg')
-          .append('g')
-          .attr('id', arg + '-g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        if (color == 0) {
-            let h = eval(arg + 'H');
-            if (h > fullH) {
-                d3.select('#' + arg + '-g')
+    renderRect();
+
+    function renderRect() {
+        for (let i = 0; i < args.length; i++){
+            d3.select('#' + args[i] +'-svg')
+              .append('g')
+              .attr('id', args[i] + '-g')
+              .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+          }
+        d3.select('#min-g')
+          .append('rect')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('width', normW)
+          .attr('height', normH)
+          .attr('fill', fillColor);
+          // .attr('stroke', strokeColor);
+        d3.select('#max-g')
+          .append('rect')
+          .attr('x', x)
+          .attr('y', viewHeight - y)
+          .attr('width', fullW)
+          .attr('height', fullH)
+          .attr('fill', fillColor);
+          // .attr('stroke', strokeColor);
+        if (value >=1 && value <=10) {
+            valW = value / min * normW;
+            valH = normH;
+            d3.select('#val-g')
+              .append('rect')
+              .attr('x', x)
+              .attr('y', y + valH)
+              .attr('width', valW)
+              .attr('height', valH)
+              .attr('fill', fillColor);
+              // .attr('stroke', strokeColor);
+        } else if (value > 10 && value < 1000) {
+            valMajorW = gridW;
+            valMajorH = Math.floor(value / 10) * normH;
+            valMinorW = value % 10 * normW;
+            valMinorH = normH;
+            d3.select('#val-g')
+              .append('rect')
+              .attr('x', x)
+              .attr('y', y - valMajorH)
+              .attr('width', valMajorW)
+              .attr('height', valMajorH)
+              .attr('fill', fillColor);
+              // .attr('stroke', strokeColor);
+            d3.select('#val-g')
+              .append('rect')
+              .attr('x', x)
+              .attr('y', y - valMajorH - valMinorH)
+              .attr('width', valMinorW)
+              .attr('height', valMinorH)
+              .attr('fill', fillColor);
+              // .attr('stroke', strokeColor);
+        } else if (value >= 1000 && value <= 10000) {
+            valTMajorW = Math.floor(value / 1000) * gridW;
+            valTMajorH = fullH;
+            d3.select('#val-g')
+              .append('rect')
+              .attr('x', x)
+              .attr('y', y - valTMajorH)
+              .attr('width', valTMajorW)
+              .attr('height', valTMajorH)
+              .attr('fill', fillColor);
+              // .attr('stroke', strokeColor);
+            if (value % 1000 >= 1 && value % 1000 <= 10) {
+                valMajorW = (value % 1000) / min * normW;
+                valMajorH = normH;
+                d3.select('#val-g')
                   .append('rect')
-                  .attr('id', arg + '-sqr')
-                  .attr('x', x)
-                  .attr('y', y)
-                  .attr('width', function() {
-                    return normW * Math.floor(h / fullH);
-                  })
-                  .attr('height', fullH)
-                  .attr('fill', '#000000')
-                  .attr('stroke', strokeColor)
-                  .attr('stroke-width', strokeWidth);
-                for (let i = 1; i < Math.floor(h / fullH); i++) {
-                    d3.select('#' + arg + '-g')
-                      .append('rect')
-                      .attr('x', function() {
-                        return x + normW * i;
-                      })
-                      .attr('y', function() {
-                        return y;
-                      })
-                      .attr('width', 1)
-                      .attr('height', fullH)
-                      .attr('fill', strokeColor);
-                  }
-                if (h % fullH != 0) {
-                    d3.select('#' + arg + '-g')
-                      .append('rect')
-                      .attr('id', arg + '-sqr-minor')
-                      .attr('x', function() {
-                        let w = document.getElementById(arg + '-sqr').width.baseVal.value;
-                        return x + w;
-                      })
-                      .attr('y', function() {
-                        return viewHeight - (h % fullH) - y;
-                      })
-                      .attr('width', normW)
-                      .attr('height', function() {
-                        return h % fullH;
-                      })
-                      .attr('fill', '#000000')
-                      .attr('stroke', strokeColor)
-                      .attr('stroke-width', strokeWidth);
-                  }
+                  .attr('x', x + valTMajorW)
+                  .attr('y', y - valMajorH)
+                  .attr('width', valMajorW)
+                  .attr('height', valMajorH)
+                  .attr('fill', fillColor);
+                  // .attr('stroke', strokeColor);
             } else {
-                d3.select('#' + arg + '-g')
+                valMajorW = gridW;
+                valMajorH = Math.floor((value % 1000) / 10) * normH;
+                valMinorW = (value % 1000) % 10 * normW;
+                valMinorH = normH;
+                d3.select('#val-g')
                   .append('rect')
-                  .attr('id', arg + '-sqr')
-                  .attr('x', x)
-                  .attr('y', function() {
-                    return viewHeight - (h % fullH) - y;
-                  })
-                  .attr('width', normW)
-                  .attr('height', function() {
-                    return h % fullH;
-                  })
-                  .attr('fill', '#000000')
-                  .attr('stroke', strokeColor)
-                  .attr('stroke-width', strokeWidth)
-            }
-        } else {
-            let hl = eval(arg + 'LocalH');
-            if (hl >= fullH) {
-                d3.select('#' + arg + '-g')
+                  .attr('x', x + valTMajorW)
+                  .attr('y', y - valMajorH)
+                  .attr('width', valMajorW)
+                  .attr('height', valMajorH)
+                  .attr('fill', fillColor);
+                  // .attr('stroke', strokeColor);
+                d3.select('#val-g')
                   .append('rect')
-                  .attr('id', arg + '-sqr')
-                  .attr('x', x)
-                  .attr('y', y)
-                  .attr('width', function() {
-                    return normW * Math.floor(hl / fullH);
-                  })
-                  .attr('height', fullH)
-                  .attr('fill', fillColor)
-                  .attr('stroke', localStrokeColor)
-                  .attr('stroke-width', strokeWidth);
-                for (let i = 1; i < Math.floor(hl / fullH); i++) {
-                    d3.select('#' + arg + '-g')
-                      .append('rect')
-                      .attr('class', 'grids')
-                      .attr('x', function() {
-                        return x + normW * i;
-                      })
-                      .attr('y', function() {
-                        return y;
-                      })
-                      .attr('width', 1)
-                      .attr('height', fullH)
-                      .attr('fill', localStrokeColor);
-                  }
-                if (hl % fullH != 0) {
-                    d3.select('#' + arg + '-g')
-                      .append('rect')
-                      .attr('id', arg + '-sqr-minor')
-                      .attr('x', function() {
-                        let w = document.getElementById(arg + '-sqr').width.baseVal.value;
-                        return x + w;
-                      })
-                      .attr('y', function() {
-                        return viewHeight - (hl % fullH) - y;
-                      })
-                      .attr('width', normW)
-                      .attr('height', function() {
-                        return hl % fullH;
-                      })
-                      .attr('fill', fillColor)
-                      .attr('stroke', localStrokeColor)
-                      .attr('stroke-width', strokeWidth);
-                  }
-            } else {
-                d3.select('#' + arg + '-g')
-                  .append('rect')
-                  .attr('id', arg + '-sqr')
-                  .attr('x', x)
-                  .attr('y', function() {
-                    return viewHeight - (hl % fullH) - y;
-                  })
-                  .attr('width', normW)
-                  .attr('height', function() {
-                    return hl % fullH;
-                  })
-                  .attr('fill', fillColor)
-                  .attr('stroke', localStrokeColor)
-                  .attr('stroke-width', strokeWidth)
-            }
-            if (color == -1) {
-                d3.select('#' + arg + '-svg')
-                  .style('background-color', fillColor);
-                d3.select('#' + arg + '-sqr')
-                  .attr('fill', '#000000')
-                  .attr('stroke', strokeColor);
-                d3.select('#' + arg + '-sqr-minor')
-                  .attr('fill', '#000000')
-                  .attr('stroke', strokeColor);
-                d3.selectAll('.grids')
-                  .attr('fill', strokeColor);
+                  .attr('x', x + valTMajorW)
+                  .attr('y', y - valMajorH - valMinorH)
+                  .attr('width', valMinorW)
+                  .attr('height', valMinorH)
+                  .attr('fill', fillColor);
+                  // .attr('stroke', strokeColor);
             }
         }
-    }
-    for (let i = 0; i < args.length; i++){
-        renderRect(args[i]);
     }
 }
 
@@ -401,36 +280,38 @@ function renderCubes(value, color) {
     let min = qMin,
         max = qMax,
         val = value,
-        pointer = 0;
+        normY = 5,
+        gridX = 50,
+        gridY = 50,
+        gridZ = 50;
     function render(arg) {
-        let scene, camera, renderer, mesh, wireframe;
+        let scene, camera, renderer;
         init(arg);
         renderScene();
         function init(arg){
-            let boxSize = 40;
-            let axes, grid, boxGeo, wireGeo, boxMat, wireMat,
-                startPos = new THREE.Vector3(-500, 0, -500),
-                camPos = new THREE.Vector3(1250, 1100, 1250),
-                lookAtPos = new THREE.Vector3(-1500, 0, -1500),
-                gridCnt = 25,
+            let axes, grid,
+                boxGeo, wireGeo,
+                boxGeoMajor, wireGeoMajor,
+                boxGeoMajor3D, wireGeoMajor3D,
+                mesh, wireframe,
+                meshMajor, wireframeMajor,
+                meshMajor3D, wireframeMajor3D,
+                boxMat, wireMat,
+                startPos = new THREE.Vector3(0, 0, 0),
+                camPos = new THREE.Vector3(750, 700, 750),
+                lookAtPos = new THREE.Vector3(-500, 0, -500),
+                gridCnt = 10,
                 gridSize = 1000,
                 gridColor = 0xd3d3d3,
                 axesSize = 500,
                 matColor, backgroundColor;
-            let data = eval(arg);
-
             if (color == 0) {
-                matColor = 0xf0f0f0,
+                matColor = 0x888888,
                 backgroundColor = 0xffffff;
             } else if (color == 1) {
                 matColor = colorScale(data/qMax);
                 backgroundColor = 0xffffff;
             }
-            // else if (color == -1) {
-            //     matColor = 0xf0f0f0,
-            //     backgroundColor = fillColor;
-            // }
-
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(backgroundColor);
@@ -438,7 +319,7 @@ function renderCubes(value, color) {
                                                   frustumSize * aspectRatio / - 2,
                                                   frustumSize * aspectRatio / 2,
                                                   frustumSize * aspectRatio / - 2,
-                                                  1, 3000);
+                                                  1, 2000);
             camera.position.copy(camPos);
             camera.lookAt(lookAtPos);
             renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
@@ -453,92 +334,164 @@ function renderCubes(value, color) {
             }
             // renderer.autoClear = true;
             // renderer.preserveDrawingBuffer = true;
-            boxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize, 1, 1, 1);
-            boxMat = new THREE.MeshBasicMaterial({color:matColor, overdraw:0.5});
-            wireGeo = new THREE.EdgesGeometry(boxGeo);
-            wireMat = new THREE.LineBasicMaterial({color:0x000000, linewidth:2});
-            mesh = new THREE.Mesh(boxGeo, boxMat);
-            mesh.position.copy(startPos);
-            wireframe = new THREE.LineSegments(wireGeo, wireMat);
-            wireframe.position.copy(startPos);
 
             axes = new THREE.AxesHelper(axesSize);
             axes.renderOrder = 1000;
-            axes.onBeforeRender = function(renderer) {
-                renderer.clearDepth();
-            }
+            // axes.onBeforeRender = function(renderer) {
+            //     renderer.clearDepth();
+            // }
+            // scene.add(axes);
             grid = new THREE.GridHelper(gridSize, gridCnt, gridColor, gridColor);
             grid.renderOrder = 997;
             grid.onBeforeRender = function(renderer) {
                 renderer.clearDepth();
             }
-            // scene.add(grid);
-            // scene.add(axes);
-            scene.add(mesh);
-            scene.add(wireframe);
 
             let parEle = document.getElementById(arg + '-div');
             parEle.appendChild(renderer.domElement);
             window.addEventListener('resize', onWindowResize, false);
 
-            // if (color == 0) {
-            //     createAll(arg);
-            // } else {
-            //     arg = arg + 'Local';
-            //     createAll(arg);
-            // }
+            let area = Math.pow(gridCnt, 2);
+            let cubic = Math.pow(gridCnt, 3);
+            let data = eval(arg);
 
-            createAll(arg);
+            boxMat = new THREE.MeshBasicMaterial({color:matColor, overdraw:0.5});
+            wireMat = new THREE.LineBasicMaterial({color:0x000000, linewidth:1});
+            if (data <= area) {
+                boxGeo = new THREE.BoxGeometry(gridX, data * normY, gridZ, 1, 1, 1);
+                wireGeo = new THREE.EdgesGeometry(boxGeo);
+                mesh = new THREE.Mesh(boxGeo, boxMat);
+                mesh.position.copy(startPos);
+                wireframe = new THREE.LineSegments(wireGeo, wireMat);
+                wireframe.position.copy(startPos);
+                mesh.translateY(data * normY / 2);
+                wireframe.translateY(data * normY / 2);
+                scene.add(mesh);
+                scene.add(wireframe);
+            } else if (data > area && data <= cubic) {
+                let major = Math.floor(data / area),
+                    minor = data % area;
+                boxGeoMajor = new THREE.BoxGeometry(gridX, gridY * 10, gridZ * major, 1, 1, 1);
+                wireGeoMajor = new THREE.EdgesGeometry(boxGeoMajor);
+                meshMajor = new THREE.Mesh(boxGeoMajor, boxMat);
+                meshMajor.position.copy(startPos);
+                wireframeMajor = new THREE.LineSegments(wireGeoMajor, wireMat);
+                wireframeMajor.position.copy(startPos);
+                meshMajor.translateY(250);
+                meshMajor.translateZ(gridZ * major / 2);
+                wireframeMajor.translateY(250);
+                wireframeMajor.translateZ(gridZ * major / 2);
 
-            function createObj(arg, deltaX, deltaY, deltaZ) {
-                let meshClone = mesh.clone(),
-                    wireClone = wireframe.clone(),
-                    offset = new THREE.Vector3(boxSize * deltaZ, boxSize * deltaY, boxSize * deltaX);
-                meshClone.position.add(offset);
-                wireClone.position.add(offset);
-                scene.add(meshClone);
-                scene.add(wireClone);
-            }
+                boxGeo = new THREE.BoxGeometry(gridX, normY * minor, gridZ, 1, 1, 1);
+                wireGeo = new THREE.EdgesGeometry(boxGeo);
+                mesh = new THREE.Mesh(boxGeo, boxMat);
+                mesh.position.z = startPos.z + gridZ * (major + 1 / 2);
+                wireframe = new THREE.LineSegments(wireGeo, wireMat);
+                wireframe.position.z = startPos.z + gridZ * (major + 1 / 2);
+                mesh.translateY(normY * minor / 2);
+                wireframe.translateY(normY * minor / 2);
 
-            function createAll(arg) {
-                let area = Math.pow(gridCnt, 2);
-                if (eval(arg) <= gridCnt) {
-                    for (let i = 0; i < eval(arg); i++) {
-                        createObj(arg, 0, i, 0);
-                    }
-                } else if(eval(arg) > gridCnt && eval(arg) <= area){
-                    let major = Math.floor(eval(arg) / gridCnt),
-                        minor = eval(arg) % gridCnt;
-                    for (let i = 0; i < major; i++){
-                        for (let j = 0; j < gridCnt; j++) {
-                            createObj(arg, i, j, 0);
-                        }
-                    }
-                    for (let i = 0; i < minor; i++) {
-                        createObj(arg, major , i, 0);
-                    }
-                } else if (eval(arg) > area) {
-                    let major3D = Math.floor(eval(arg) / area),
-                        major2D = Math.floor((eval(arg) % area) / gridCnt),
-                        minor = (eval(arg) % area) % gridCnt;
-                    for (let i = 0; i < major3D; i++) {
-                        for (let j = 0; j < gridCnt; j++) {
-                            for (let k = 0; k < gridCnt; k++) {
-                                createObj(arg, j, k, i);
-                            }
-                        }
-                    }
-                    for (let i = 0; i < major2D; i++) {
-                        for (let j = 0; j < gridCnt; j++) {
-                            createObj(arg, i, j, major3D);
-                        }
-                    }
-                    for (let i = 0; i < minor; i++) {
-                        createObj(arg, major2D, i, major3D);
-                    }
+                scene.add(meshMajor);
+                scene.add(wireframeMajor);
+                scene.add(mesh);
+                scene.add(wireframe);
+            } else if (data > cubic) {
+                let major3D = Math.floor(data / cubic),
+                    major = Math.floor(data % cubic / area),
+                    minor = (data % cubic) % area;
+                boxGeoMajor3D = new THREE.BoxGeometry(gridX * major3D, gridY * 10, gridZ * 10, 1, 1, 1);
+                wireGeoMajor3D = new THREE.EdgesGeometry(boxGeoMajor3D);
+                meshMajor3D = new THREE.Mesh(boxGeoMajor3D, boxMat);
+                meshMajor3D.position.copy(startPos);
+                wireframeMajor3D = new THREE.LineSegments(wireGeoMajor3D, wireMat);
+                wireframeMajor3D.position.copy(startPos);
+                meshMajor3D.translateX(gridX * major3D / 2);
+                meshMajor3D.translateY(gridY * 10 / 2);
+                meshMajor3D.translateZ(gridZ * 10 / 2)
+                wireframeMajor3D.translateX(gridX * major3D / 2);
+                wireframeMajor3D.translateY(gridY * 10 / 2);
+                wireframeMajor3D.translateZ(gridZ * 10 / 2);
+                scene.add(meshMajor3D);
+                scene.add(wireframeMajor3D);
+                if (data % cubic != 0) {
+                    boxGeoMajor = new THREE.BoxGeometry(gridX, gridY * 10, gridZ * major, 1, 1, 1);
+                    wireGeoMajor = new THREE.EdgesGeometry(boxGeoMajor);
+                    meshMajor = new THREE.Mesh(boxGeoMajor, boxMat);
+                    wireframeMajor = new THREE.LineSegments(wireGeoMajor, wireMat);
+                    meshMajor.position.x = startPos.x + gridX * (major3D + 1 / 2);
+                    wireframeMajor.position.x = startPos.x + gridX * (major3D + 1 / 2);
+                    meshMajor.translateY(gridY * 10 / 2);
+                    meshMajor.translateZ(gridZ * major / 2);
+                    wireframeMajor.translateY(gridY * 10 / 2);
+                    wireframeMajor.translateZ(gridZ * major / 2);
+                    scene.add(meshMajor);
+                    scene.add(wireframeMajor);
+                }
+                if (minor != 0) {
+                    boxGeo = new THREE.BoxGeometry(gridX, normY * minor, gridZ, 1, 1, 1);
+                    wireGeo = new THREE.EdgesGeometry(boxGeo);
+                    mesh = new THREE.Mesh(boxGeo, boxMat);
+                    wireframe = new THREE.LineSegments(wireGeo, wireMat);
+                    mesh.position.x = startPos.x + gridX * (major3D + 1 / 2);
+                    mesh.position.z = startPos.z + gridZ * (major + 1 / 2);
+                    wireframe.position.x = startPos.x + gridX * (major3D + 1 / 2);
+                    wireframe.position.z = startPos.z + gridZ * (major + 1 / 2);
+                    mesh.translateY(normY * minor / 2);
+                    wireframe.translateY(normY * minor / 2);
+                    scene.add(mesh);
+                    scene.add(wireframe);
                 }
             }
 
+            // createAll(arg);
+            // function createObj(arg, deltaX, deltaY, deltaZ) {
+            //     let meshClone = mesh.clone(),
+            //         // wireClone = wireframe.clone(),
+            //         offset = new THREE.Vector3(gridZ * deltaZ, normY * deltaY, gridX * deltaX);
+            //     meshClone.position.add(offset);
+            //     // wireClone.position.add(offset);
+            //     scene.add(meshClone);
+            //     // scene.add(wireClone);
+            // }
+            // function createAll(arg) {
+            //     let area = Math.pow(gridCnt, 2);
+            //     let cubic = Math.pow(gridCnt, 3);
+            //     if (eval(arg)) <= area) {
+            //         for (let i = 0; i < eval(arg); i++) {
+            //             createObj(arg, 0, i, 0);
+            //         }
+            //     } else if(eval(arg) > area && eval(arg) <= cubic){
+            //         let major = Math.floor(eval(arg) / area),
+            //             minor = eval(arg) % area;
+            //         for (let i = 0; i < major; i++){
+            //             for (let j = 0; j < gridCnt; j++) {
+            //                 createObj(arg, i, j, 0);
+            //             }
+            //         }
+            //         for (let i = 0; i < minor; i++) {
+            //             createObj(arg, major , i, 0);
+            //         }
+            //     } else if (eval(arg) > cubic) {
+            //         let major3D = Math.floor(eval(arg) / cubic),
+            //             major = Math.floor((eval(arg) % cubic) / area),
+            //             minor = (eval(arg) % cubic) % area;
+            //         for (let i = 0; i < major3D; i++) {
+            //             for (let j = 0; j < gridCnt; j++) {
+            //                 for (let k = 0; k < area; k++) {
+            //                     createObj(arg, j, k, i);
+            //                 }
+            //             }
+            //         }
+            //         for (let i = 0; i < major; i++) {
+            //             for (let j = 0; j < area; j++) {
+            //                 createObj(arg, i, j, major3D);
+            //             }
+            //         }
+            //         for (let i = 0; i < minor; i++) {
+            //             createObj(arg, major, i, major3D);
+            //         }
+            //     }
+            // }
             function onWindowResize() {
                 camera.left = frustumSize * aspectRatio / 2;
                 camera.right = frustumSize * aspectRatio / -2;
