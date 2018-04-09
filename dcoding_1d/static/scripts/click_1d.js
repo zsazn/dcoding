@@ -7,8 +7,10 @@ function clickToPractice() {
 }
 
 function clickToStart() {
-    window.location.href='question/test/length_global/1/1';
+    window.sessionStorage.setItem('q_dimension', 'start_length_global');
+    window.location.href='example';
 }
+
 
 function clickToAnswer() {
     $('#answer-modal').on('show.bs.modal', function() {

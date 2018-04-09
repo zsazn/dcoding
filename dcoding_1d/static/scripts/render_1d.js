@@ -15,13 +15,13 @@ const viewWidth = 600,
 
 const minColor = '#d4e4f4',
       maxColor = '#08306b';
-let colorScaleGlobal = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
-let colorScaleLocal = d3.scaleOrdinal()
-                        .domain(orders)
-                        .range([minColor,
-                                colorScaleGlobal(0.5),
-                                colorScaleGlobal(0.75),
-                                maxColor]);
+let colorLinearScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
+let colorOrdinalScale = d3.scaleOrdinal()
+                          .domain(orders)
+                          .range([minColor,
+                                  colorLinearScale(0.33),
+                                  colorLinearScale(0.67),
+                                  maxColor]);
 
 const args = ['min', 'max', 'val'];
 
@@ -45,12 +45,12 @@ function annotate(arg) {
     p.setAttribute('class', 'annotation')
     p.setAttribute('title', title[arg]);
     if (qDimension.indexOf('global') != -1) {
-        text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
+        text = {'min': 'Minimum Value Reference: <span><u><i>20</i></u></span>',
                 'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
                 'val': 'Value Estimation?'};
     } else {
         text = {'min': 'Minimum Value Reference: <span><u><i>' + minLocal.toString() + '</i></u></span>',
-                'max': 'Maximum Value Reference: <span><u><i>' + maxLocal.toString() + '</i></u></span>',
+                'max': 'Maximum Value Reference: <span><u><i>' + (maxLocal + 1).toString() + '</i></u></span>',
                 'val': 'Value Estimation?'};
             }
     p.innerHTML = text[arg];
@@ -130,7 +130,7 @@ function renderBars(value, extreme, color) {
         valLocalH = new LocalHeight(qVal, maxH);
     function renderBar(arg) {
         let data = eval(arg);
-        let fillColor = colorScaleGlobal(data/qMax);
+        let fillColor = colorOrdinalScale(order(data) - 1);
 
         valH = minH + (value - qMin) / (qMax - qMin) * (maxH - minH);
         var bar = d3.select('#' + arg + '-svg')
@@ -157,7 +157,7 @@ function renderBars(value, extreme, color) {
         }
     }
     function renderBarLocal(arg, color) {
-        let fillColor = colorScaleLocal(order(value));
+        let fillColor = colorOrdinalScale(order(value));
 
         var bar = d3.select('#' + arg + '-svg')
                     .append('g')
@@ -215,7 +215,7 @@ function renderLegend() {
               .attr('width', legendUnit)
               .attr('height', legendRectH)
               .attr('fill', function() {
-                return colorScaleLocal(i);
+                return colorOrdinalScale(i);
               });
           }
     for (let j = 0; j < orders.length + 1; j++) {
@@ -226,11 +226,7 @@ function renderLegend() {
               .attr('y', legendRectH * 2)
               .attr('text-anchor', 'middle')
               .text(function() {
-                if (j == 0) {
-                    return '1';
-                } else {
                     return Math.pow(10, j);
-                }
               });
     }
 }

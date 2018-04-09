@@ -1,0 +1,96 @@
+{% load static %}
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta http-equiv="content-type" content="text/html" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Example Quesiton">
+<meta name="author" content="Zheng Zhou">
+<title>
+    {% block pagetitle %}
+        Example question
+    {% endblock pagetitle %}
+</title>
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/vendor/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'stylesheets/stylesheet.css' %}">
+<script type="text/javascript" src="{% static 'scripts/vendor/jquery-3.3.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/bootstrap.min.js' %}"></script>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="row header">
+            <div class="col-2 header"></div>
+            <div class="col-8 header">
+                <h2 class="header-text" data-toggle="tooltip" data-placement="bottom" title="示例">Example question</h2>
+            </div>
+            <div class="col-2 header"></div>
+        </div>
+        <div class="row content">
+            <div class="col-2 header"></div>
+            <div class="col-8 content" id="example-image"></div>
+            <div class="col-2 header"></div>
+        </div>
+        <div class="row footer">
+            <div class="col footer">
+                <button class="btn btn-primary" type="submit" onclick="fromExample()">Next</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var qDimension = sessionStorage.getItem('q_dimension');
+        var img = document.createElement('img');
+        var imgPar = document.getElementById('example-image');
+        imgPar.appendChild(img);
+        var nextDimension;
+        switch(qDimension) {
+            case 'start_length':
+                img.src = '{% static "img/example_length.png" %}';
+                nextDimension = 'length';
+                break;
+            case 'length':
+                img.src = '{% static "img/example_area.png" %}';
+                nextDimension = 'area';
+                break;
+            case 'area':
+                img.src = '{% static "img/example_volume.png" %}';
+                nextDimension = 'volume';
+                break;
+            case 'volume':
+                img.src = '{% static "img/example_volume_color.png" %}';
+                nextDimension = 'volume_color';
+                break;
+            case 'start_length_global':
+                img.src = '{% static "img/example_length_global.png" %}';
+                nextDimension = 'length_global';
+                break;
+            case 'length_global':
+                img.src = '{% static "img/example_length_local.png" %}';
+                nextDimension = 'length_local';
+                break;
+            case 'length_local':
+                img.src = '{% static "img/length_global_background.png" %}';
+                nextDimension = 'length_global_background_color';
+                break;
+            case 'length_global_background_color':
+                img.src = '{% static "img/example_length_local_background.png" %}';
+                nextDimension = 'length_local_background_color';
+                break;
+            default:
+                console.log('example can\'t be loaded.');
+        }
+        img.className = 'img-fluid';
+        img.setAttribute('alt', 'example_image');
+        img.setAttribute('width', '2000');
+        function fromExample() {
+            let href = window.location.href;
+            if (href.indexOf('1d') != -1){
+                window.location.href = '/dcoding-1d/question/test/' + nextDimension + '/1/1';
+            } else {
+                window.location.href = '/dcoding/question/test/' + nextDimension + '/1/1';
+            }
+        }
+        </script>
+</body>
+</html>

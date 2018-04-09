@@ -7,6 +7,9 @@
         var qDimension = '{{ q.q_dimension }}';
         var qSet = '{{ q.q_set }}';
         var qIndex = '{{ q.q_index }}';
+        if (qIndex == '5') {
+            sessionStorage.setItem('q_dimension', qDimension);
+        }
         var qVal;
         if (qType == 'pilot' && qDimension == 'length') {
             qVal = 300;

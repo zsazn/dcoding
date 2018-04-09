@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^dcoding/start$', views.StartView.as_view(), name='start'),
     url(r'^dcoding/break$', views.BreakView.as_view(), name='break'),
     url(r'^dcoding/end$', views.EndView.as_view(), name='end'),
+    url(r'^dcoding/example$', views.ExampleView.as_view(), name='example'),
 ]

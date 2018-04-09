@@ -7,7 +7,8 @@ function clickToPractice() {
 }
 
 function clickToStart() {
-    window.location.href='question/test/length/1/1';
+    window.sessionStorage.setItem('q_dimension', 'start_length');
+    window.location.href='example';
 }
 
 function clickToNextSession() {

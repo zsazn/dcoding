@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^dcoding-1d/question/(?P<type>\w+)/(?P<dimension>\w+)/(?P<set>\d+)/(?P<index>\d+)$', views.QuestionView.as_view(), name='question'),
     url(r'^dcoding-1d/start$', views.StartView.as_view(), name='start'),
     url(r'^dcoding-1d/end$', views.EndView.as_view(), name='end'),
+    url(r'^dcoding-1d/example$', views.ExampleView.as_view(), name='example'),
 ]

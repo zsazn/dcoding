@@ -10,7 +10,7 @@ var legendHeight = 80;
 var margin = {'top': 10, 'bottom': 20, 'left': 10, 'right': 10};
 
 const orderNum = 5;
-const orders = [1, 2, 3, 4, 5];
+const orders = [1, 2, 3, 4];
 
 const viewWidth = 600,
       viewHeight = 600;
@@ -26,7 +26,13 @@ const frustumSize = 1000;
 
 const minColor = '#d4e4f4',
       maxColor = '#08306b';
-let colorScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
+let colorLinearScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
+let colorOrdinalScale = d3.scaleOrdinal()
+                          .domain(orders)
+                          .range([minColor,
+                                  colorLinearScale(0.33),
+                                  colorLinearScale(0.67),
+                                  maxColor])
 
 const args = ['min', 'max', 'val'];
 
@@ -50,9 +56,15 @@ function annotate(arg) {
     p.setAttribute('data-placement', 'bottom');
     p.setAttribute('class', 'annotation')
     p.setAttribute('title', title[arg]);
-    text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
-            'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
-            'val': 'Value Estimation?'};
+    if (qDimension == 'length') {
+        text = {'min': 'Minimum Value Reference: <span><u><i>20</i></u></span>',
+                'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
+                'val': 'Value Estimation?'};
+    } else {
+        text = {'min': 'Minimum Value Reference: <span><u><i>' + qMin.toString() + '</i></u></span>',
+                'max': 'Maximum Value Reference: <span><u><i>' + qMax.toString() + '</i></u></span>',
+                'val': 'Value Estimation?'};
+    }
     p.innerHTML = text[arg];
     document.getElementById(arg + '-div').appendChild(p);
 }
@@ -144,7 +156,7 @@ function renderRects(value, color) {
           .attr('id', args[i] + '-svg')
           .attr('width', svgWidth)
           .attr('height', svgHeight);
-        document.getElementById(arg + '-svg').setAttribute('viewBox', '0 0 600 600');
+        document.getElementById(args[i] + '-svg').setAttribute('viewBox', '0 0 600 600');
       }
 
     let min = qMin,
@@ -305,13 +317,7 @@ function renderCubes(value, color) {
                 gridColor = 0xd3d3d3,
                 axesSize = 500,
                 matColor, backgroundColor;
-            if (color == 0) {
-                matColor = 0x888888,
-                backgroundColor = 0xffffff;
-            } else if (color == 1) {
-                matColor = colorScale(data/qMax);
-                backgroundColor = 0xffffff;
-            }
+
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(backgroundColor);
@@ -354,7 +360,13 @@ function renderCubes(value, color) {
             let area = Math.pow(gridCnt, 2);
             let cubic = Math.pow(gridCnt, 3);
             let data = eval(arg);
-
+            if (color == 0) {
+                matColor = 0x888888,
+                backgroundColor = 0xffffff;
+            } else if (color == 1) {
+                matColor = colorOrdinalScale(order(data) - 1);
+                backgroundColor = 0xffffff;
+            }
             boxMat = new THREE.MeshBasicMaterial({color:matColor, overdraw:0.5});
             wireMat = new THREE.LineBasicMaterial({color:0x000000, linewidth:1});
             if (data <= area) {
@@ -521,10 +533,58 @@ function renderCubes(value, color) {
     }
 }
 
+// function renderLegend() {
+//     let legendUnit = 100;
+//     let legendRectW = 1000;
+//     let legendRectH = 20;
+//     let legend = d3.select('#legend')
+//                    .append('svg')
+//                    .attr('id', 'legend-svg')
+//                    .attr('width', legendWidth)
+//                    .attr('height', legendHeight)
+//                    .append('g')
+//                    .attr('id', 'legend-g')
+//                    .attr('transform', 'translate(50,0)');
+//     document.getElementById('legend-svg').setAttribute('viewbox', '0 0 1000 100');
+//     var lg = legend.append('defs')
+//                    .append('linearGradient')
+//                    .attr('id', 'legend-linear-gradient')
+//                    .attr('x1', '0%')
+//                    .attr('y1', '0%')
+//                    .attr('x2', '100%')
+//                    .attr('y2', '0%')
+//                    .attr('spreadMethod', 'pad');
+//     lg.append('stop')
+//       .attr('offset', '0%')
+//       .attr('stop-color', d3.rgb(minColor))
+//       .attr('stop-opacity', 1);
+//     lg.append('stop')
+//       .attr('offset', '100%')
+//       .attr('stop-color', d3.rgb(maxColor))
+//       .attr('stop-opacity', 1);
+//     legend.append('rect')
+//           .attr('id', 'legend_rect')
+//           .attr('x', 0)
+//           .attr('y', 0)
+//           .attr('width', legendRectW)
+//           .attr('height', legendRectH)
+//           .attr('fill', 'url(#legend-linear-gradient)');
+//     for (let j = 0; j < orders.length; j++) {
+//         legend.append('text')
+//               .attr('x', function() {
+//                 return Math.pow(10, j) / 10000 * legendRectW;
+//               })
+//               .attr('y', legendRectH * 2)
+//               .attr('text-anchor', 'middle')
+//               .text(function() {
+//                 return Math.pow(10, j);
+//               });
+//     }
+// }
+
 function renderLegend() {
     let legendUnit = 100;
-    let legendRectW = 500;
-    let legendRectH = 20;
+    let legendRectH = 30;
     let legend = d3.select('#legend')
                    .append('svg')
                    .attr('id', 'legend-svg')
@@ -532,55 +592,21 @@ function renderLegend() {
                    .attr('height', legendHeight)
                    .append('g')
                    .attr('id', 'legend-g')
-                   .attr('transform', 'translate(50,0)');
+                   .attr('transform', 'translate(100,0)');
     document.getElementById('legend-svg').setAttribute('viewbox', '0 0 600 100');
-    var lg = legend.append('defs')
-                   .append('linearGradient')
-                   .attr('id', 'legend-linear-gradient')
-                   .attr('x1', '0%')
-                   .attr('y1', '0%')
-                   .attr('x2', '100%')
-                   .attr('y2', '0%')
-                   .attr('spreadMethod', 'pad');
-    lg.append('stop')
-      .attr('offset', '0%')
-      .attr('stop-color', d3.rgb(minColor))
-      .attr('stop-opacity', 1);
-    lg.append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', d3.rgb(maxColor))
-      .attr('stop-opacity', 1);
-    legend.append('rect')
-          .attr('id', 'legend_rect')
-          .attr('x', 0)
-          .attr('y', 0)
-          .attr('width', legendRectW)
-          .attr('height', legendRectH)
-          .attr('fill', 'url(#legend-linear-gradient)');
-    // legend.append('text')
-    //       .attr('x', 0)
-    //       .attr('y', legendRectH * 2)
-    //       .attr('text-anchor', 'middle')
-    //       .text(qMin);
-    // legend.append('text')
-    //       .attr('x', legendRectW)
-    //       .attr('y', legendRectH * 2)
-    //       .attr('text-anchor', 'middle')
-    //       .text(10000);
-
-    // for (let i = 1; i < orders.length + 1; i++) {
-    //     legend.append('rect')
-    //           .attr('id', 'legend_' + i)
-    //           .attr('x', function() {
-    //             return legendUnit * (i - 1);
-    //           })
-    //           .attr('y', margin.top)
-    //           .attr('width', legendUnit)
-    //           .attr('height', legendRectH)
-    //           .attr('fill', function() {
-    //             return colorScale(i);
-    //           });
-    //       }
+    for (let i = 1; i < orders.length + 1; i++) {
+        legend.append('rect')
+              .attr('id', 'legend_' + i)
+              .attr('x', function() {
+                return legendUnit * (i - 1);
+              })
+              .attr('y', margin.top)
+              .attr('width', legendUnit)
+              .attr('height', legendRectH)
+              .attr('fill', function() {
+                return colorOrdinalScale(i);
+              });
+          }
     for (let j = 0; j < orders.length + 1; j++) {
         legend.append('text')
               .attr('x', function() {
@@ -589,11 +615,7 @@ function renderLegend() {
               .attr('y', legendRectH * 2)
               .attr('text-anchor', 'middle')
               .text(function() {
-                if (j == 0) {
-                    return '1';
-                } else {
                     return Math.pow(10, j);
-                }
               });
     }
 }

@@ -46,6 +46,11 @@ class BreakView(TemplateView):
     def get(self, request):
         return render(request, self.template_name)
 
+class ExampleView(TemplateView):
+    template_name = 'example.html'
+    def get(self, request):
+        return render(request, self.template_name)
+
 class EndView(TemplateView):
     template_name = '3d/end.html'
     def get(self, request):
@@ -105,10 +110,8 @@ class QuestionView(TemplateView):
                           return HttpResponseRedirect('/dcoding/end')
                       elif q_dimension_index < 3:
                           # if q_dimension == 'volume' or q_dimension == 'volume_color':
-                          #     return HttpResponseRedirect('/dcoding/break');
-                          q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
-                          q_set = 1
-                          q_index = 1
+                          #     return HttpResponseRedirect('/dcoding/break')
+                          return HttpResponseRedirect('/dcoding/example')
                 else:
                     raise Http404('Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding:question',

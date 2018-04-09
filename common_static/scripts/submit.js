@@ -56,7 +56,7 @@ function submitAnswer() {
                     </span> has been submitted. <br>The actual value is \
                     <span style="color: #ff0000;"><strong>' + qVal + '.</strong>\
                     </span><br>Click "Next" to continue.';
-                } else if (qSet == '2' && qIndex == '5') {
+                } else if (qSet == '1' && qIndex == '5') {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
                     </span> has been submitted. <br>Click "Next" to continue.';

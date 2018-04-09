@@ -41,6 +41,11 @@ class StartView(TemplateView):
     def get(self, request):
         return render(request, self.template_name)
 
+class ExampleView(TemplateView):
+    template_name = 'example.html'
+    def get(self, request):
+        return render(request, self.template_name)
+
 class EndView(TemplateView):
     template_name = '1d/end.html'
     def get(self, request):
@@ -93,9 +98,10 @@ class QuestionView(TemplateView):
                         request.session.flush()
                         return HttpResponseRedirect('/dcoding-1d/end')
                     elif q_dimension_index < 3:
-                        q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
-                        q_set = 1
-                        q_index = 1
+                        # q_dimension = QUESTION_DIMENSIONS[q_dimension_index + 1]
+                        # q_set = 1
+                        # q_index = 1
+                        return HttpResponseRedirect('/dcoding-1d/example')
                 else:
                     raise Http404('Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding_1d:question',
