@@ -22,8 +22,8 @@
     <div class="container">
         <div class="row header">
             <div class="col-2 header"></div>
-            <div class="col-8 header">
-                <h2 class="header-text" data-toggle="tooltip" data-placement="bottom" title="示例">Example question</h2>
+            <div class="col-8 header" id='header'>
+                <h4 class="header-text" data-toggle="tooltip" data-placement="bottom" title="示例">Example question</h4>
             </div>
             <div class="col-2 header"></div>
         </div>
@@ -41,39 +41,50 @@
     <script type="text/javascript">
         var qDimension = sessionStorage.getItem('q_dimension');
         var img = document.createElement('img');
+        var header = document.createElement('h4');
         var imgPar = document.getElementById('example-image');
+        var headerPar = document.getElementById('header');
         imgPar.appendChild(img);
+        headerPar.prepend(header)
         var nextDimension;
         switch(qDimension) {
             case 'start_length':
+                header.innerText = 'The next 5 questions are about Length in Vertical dimension.';
                 img.src = '{% static "img/example_length.png" %}';
                 nextDimension = 'length';
                 break;
             case 'length':
+                header.innerText = 'The next 5 questions are about Length in Both Horizontal and Vertical dimensions.';
                 img.src = '{% static "img/example_area.png" %}';
                 nextDimension = 'area';
                 break;
             case 'area':
+                header.innerText = 'The next 5 questions are about Length in 3D dimensions.';
                 img.src = '{% static "img/example_volume.png" %}';
                 nextDimension = 'volume';
                 break;
             case 'volume':
+                header.innerText = 'The next 5 questions are about Length in 3D diemensions and the Color.';
                 img.src = '{% static "img/example_volume_color.png" %}';
                 nextDimension = 'volume_color';
                 break;
             case 'start_length_global':
+                header.innerText = 'The next 5 questions are about the Vertical Length and Color, referencing Global Extremes.';
                 img.src = '{% static "img/example_length_global.png" %}';
                 nextDimension = 'length_global';
                 break;
             case 'length_global':
+                header.innerText = 'The next 5 questions are about the Vertical Length and Color, referencing Local Extremes.';
                 img.src = '{% static "img/example_length_local.png" %}';
                 nextDimension = 'length_local';
                 break;
             case 'length_local':
+                header.innerText = 'The next 5 questions are about the Vertical Length and Background Color, referencing Global Extremes.';
                 img.src = '{% static "img/length_global_background.png" %}';
                 nextDimension = 'length_global_background_color';
                 break;
             case 'length_global_background_color':
+                header.innerText = 'The next 5 questions are about the Vertical Length and Background Color, referencing Local Extremes.';
                 img.src = '{% static "img/example_length_local_background.png" %}';
                 nextDimension = 'length_local_background_color';
                 break;
@@ -83,6 +94,7 @@
         img.className = 'img-fluid';
         img.setAttribute('alt', 'example_image');
         img.setAttribute('width', '2000');
+        header.className = 'header-text';
         function fromExample() {
             let href = window.location.href;
             if (href.indexOf('1d') != -1){
