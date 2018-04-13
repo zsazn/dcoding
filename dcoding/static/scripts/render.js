@@ -310,8 +310,8 @@ function renderCubes(value, color) {
                 meshMajor3D, wireframeMajor3D,
                 boxMat, wireMat,
                 startPos = new THREE.Vector3(0, 0, 0),
-                camPos = new THREE.Vector3(750, 700, 750),
-                lookAtPos = new THREE.Vector3(-500, 0, -500),
+                camPos = new THREE.Vector3(550, 600, 550),
+                lookAtPos = new THREE.Vector3(-400, 0, -400),
                 gridCnt = 10,
                 gridSize = 1000,
                 gridColor = 0xd3d3d3,
@@ -321,11 +321,11 @@ function renderCubes(value, color) {
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(backgroundColor);
-            camera = new THREE.OrthographicCamera(frustumSize * aspectRatio / 2,
-                                                  frustumSize * aspectRatio / - 2,
-                                                  frustumSize * aspectRatio / 2,
-                                                  frustumSize * aspectRatio / - 2,
-                                                  1, 2000);
+            camera = new THREE.OrthographicCamera(frustumSize * aspectRatio / 2.5,
+                                                  frustumSize * aspectRatio / - 2.5,
+                                                  frustumSize * aspectRatio / 2.5,
+                                                  frustumSize * aspectRatio / - 2.5,
+                                                  1, 1500);
             camera.position.copy(camPos);
             camera.lookAt(lookAtPos);
             renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
@@ -394,14 +394,16 @@ function renderCubes(value, color) {
                 wireframeMajor.translateY(250);
                 wireframeMajor.translateZ(gridZ * major / 2);
 
-                boxGeo = new THREE.BoxGeometry(gridX, normY * minor, gridZ, 1, 1, 1);
-                wireGeo = new THREE.EdgesGeometry(boxGeo);
-                mesh = new THREE.Mesh(boxGeo, boxMat);
-                mesh.position.z = startPos.z + gridZ * (major + 1 / 2);
-                wireframe = new THREE.LineSegments(wireGeo, wireMat);
-                wireframe.position.z = startPos.z + gridZ * (major + 1 / 2);
-                mesh.translateY(normY * minor / 2);
-                wireframe.translateY(normY * minor / 2);
+                if (minor != 0) {
+                  boxGeo = new THREE.BoxGeometry(gridX, normY * minor, gridZ, 1, 1, 1);
+                  wireGeo = new THREE.EdgesGeometry(boxGeo);
+                  mesh = new THREE.Mesh(boxGeo, boxMat);
+                  mesh.position.z = startPos.z + gridZ * (major + 1 / 2);
+                  wireframe = new THREE.LineSegments(wireGeo, wireMat);
+                  wireframe.position.z = startPos.z + gridZ * (major + 1 / 2);
+                  mesh.translateY(normY * minor / 2);
+                  wireframe.translateY(normY * minor / 2);
+                }
 
                 scene.add(meshMajor);
                 scene.add(wireframeMajor);

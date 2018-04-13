@@ -2,128 +2,127 @@
 {% load static %}
 
 {% block startscript %}
-    <script type="text/javascript">
-        var qType = '{{ q.q_type }}';
-        var qDimension = '{{ q.q_dimension }}';
-        var qSet = '{{ q.q_set }}';
-        var qIndex = '{{ q.q_index }}';
-        if (qIndex == '5') {
-            sessionStorage.setItem('q_dimension', qDimension);
-        }
-        var qVal;
-        if (qType == 'pilot' && qDimension == 'length') {
-            qVal = 300;
-        }
-        else if (qType == 'pilot' && qDimension == 'area') {
-            qVal = 6666;
-        }
-        else {
-            qVal = '{{ q_val }}';
-        }
-        const qMin = '{{ q.q_min }}';
-        const qMax = '{{ q.q_max }}';
-    </script>
-    {% if 'volume' in q.q_dimension %}
-        <script type="text/javascript" src="{% static 'scripts/vendor/three.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'scripts/vendor/Projector.js' %}"></script>
-        <script type="text/javascript" src="{% static 'scripts/vendor/CanvasRenderer.js' %}"></script>
-    {% endif %}
+<script type="text/javascript">
+    var qType = '{{ q.q_type }}';
+    var qDimension = '{{ q.q_dimension }}';
+    var qSet = '{{ q.q_set }}';
+    var qIndex = '{{ q.q_index }}';
+    if (qIndex == '5') {
+        sessionStorage.setItem('q_dimension', qDimension);
+    }
+    var qVal;
+    if (qType == 'pilot' && qDimension == 'length') {
+        qVal = 300;
+    }
+    else if (qType == 'pilot' && qDimension == 'area') {
+        qVal = 6666;
+    }
+    else {
+        qVal = '{{ q_val }}';
+    }
+    const qMin = '{{ q.q_min }}';
+    const qMax = '{{ q.q_max }}';
+</script>
+{% if 'volume' in q.q_dimension %}
+<script type="text/javascript" src="{% static 'scripts/vendor/three.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/Projector.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/vendor/CanvasRenderer.js' %}"></script>
+{% endif %}
 {% endblock startscript %}
 
 {% block pagetitle %}
-    {% if q.q_type == 'pilot' %}
-        Warm-up Practice Session
-        {% else %}
-        Formal Testing Session
-    {% endif %}
+{% if q.q_type == 'pilot' %}
+Warm-up Practice Session
+{% else %}
+Formal Testing Session
+{% endif %}
 {% endblock pagetitle %}
 
 {% block header %}
-    <div class="col header">
-        {% if q.q_type == 'pilot' %}
-            {% if q.q_dimension == 'length' %}
-                <h2 id="test">Warm yourself up!</h2>
-            {% elif q.q_dimension == 'area' %}
-                <h2>Another one!</h2>
-            {% endif %}
-        {% elif q.q_type == 'test' %}
-            {% if q.q_set == 1 %}
-                <h3 class="q-num">Question {{ q.q_index }}</h3>
-            {% elif q.q_set == 2 %}
-                <h3 class="q-num">Question {{ q.q_index|add:"5" }}</h3>
-            {% endif %}
-        {% endif %}
-    </div>
+<div class="col header">
+{% if q.q_type == 'pilot' %}
+{% if q.q_dimension == 'length' %}
+    <h2 id="test">Warm yourself up!</h2>
+{% elif q.q_dimension == 'area' %}
+    <h2>Another one!</h2>
+{% endif %}
+{% elif q.q_type == 'test' %}
+{% if q.q_set == 1 %}
+    <h3 class="q-num">Question {{ q.q_index }}</h3>
+{% elif q.q_set == 2 %}
+    <h3 class="q-num">Question {{ q.q_index|add:"5" }}</h3>
+{% endif %}
+{% endif %}
+</div>
 {% endblock header %}
 
 
 {% block content %}
-
-    <div class="col" id="min-div">
-    </div>
-    <div class="col" id="val-div">
-    </div>
-    <div class="col" id="max-div">
-    </div>
-    <div class="modal fade" id="answer-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-        <form name="answer" action="" method="post" onkeypress="return event.keyCode != 13;">
-            {% csrf_token %}
-            <div class="modal-dialog" >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modal-title">Fill the answer</h5>
-                        <button type="button" class="close" id="close-button" aria-label="close" onclick="closeAnswer()">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modal-body">
-                        <div class="input-group" id="input-group">
-                            {{ form }}
-                            <span class="input-group-btn">
-                                <button class="btn btn-secondary" type="button" onclick="submitAnswer()" id="button-submit-answer">Submit</button>
-                            </span>
-                        </div>
-                    </div>
-        </form>
-                    <div class="modal-footer" id="modal-footer">
-                        <form name="next" method="post" onkeypress="return event.keyCode != 13;">
-                            {% csrf_token %}
-                            <button class="btn btn-success" id="next-button" name="next-button" type="submit" style="visibility: hidden;">Next</button>
-                        </form>
+<div class="col" id="min-div">
+</div>
+<div class="col" id="val-div">
+</div>
+<div class="col" id="max-div">
+</div>
+<div class="modal fade" id="answer-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <form name="answer" action="" method="post" onkeypress="return event.keyCode != 13;">
+        {% csrf_token %}
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Fill the answer</h5>
+                    <button type="button" class="close" id="close-button" aria-label="close" onclick="closeAnswer()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <div class="input-group" id="input-group">
+                        {{ form }}
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button" onclick="submitAnswer()" id="button-submit-answer">Submit</button>
+                        </span>
                     </div>
                 </div>
+    </form>
+                <div class="modal-footer" id="modal-footer">
+                    <form name="next" method="post" onkeypress="return event.keyCode != 13;">
+                        {% csrf_token %}
+                        <button class="btn btn-success" id="next-button" name="next-button" type="submit" style="visibility: hidden;">Next</button>
+                    </form>
+                </div>
             </div>
-    </div>
+        </div>
+</div>
 {% endblock content %}
 
 {% block footer %}
-    <div class="col" style="text-align: center;">
-        <button id="a-btn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#answer-modal" onclick="clickToAnswer()">Click to Answer</button>
-    </div>
+<div class="col" style="text-align: center;">
+    <button id="a-btn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#answer-modal" onclick="clickToAnswer()">Click to Answer</button>
+</div>
 {% endblock footer %}
 
 
 {% block endscript %}
-    <script type="text/javascript" src="{% static 'scripts/render.js' %}"></script>
-    <script type="text/javascript" src="{% static 'scripts/autofocus.js' %}"></script>
-    <script type="text/javascript">
-        var loadedTime, accessTime;
-        window.addEventListener('load', function(e) {
-            if (sessionStorage.getItem('access_time') == null) {
-                accessTime = new Date(Date.now());
-                sessionStorage.setItem('access_time', accessTime);
-            } else {
-                accessTime = sessionStorage.getItem('access_time');
-            }
-            loadedTime = Date.now();
-        });
-        if (qType == 'pilot' && qDimension == 'length') {
-            let btn = document.getElementById('a-btn');
-            btn.addEventListener('mouseover', function(e) {
-                e.target.removeEventListener(e.type, arguments.callee);
-                alert('Click to answer only after you are ready to answer!!! \n请确认您已思考完毕且完全准备好答题时再点击！');
-            }, false);
+<script type="text/javascript" src="{% static 'scripts/render.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/autofocus.js' %}"></script>
+<script type="text/javascript">
+    var loadedTime, accessTime;
+    window.addEventListener('load', function(e) {
+        if (sessionStorage.getItem('access_time') == null) {
+            accessTime = new Date(Date.now());
+            sessionStorage.setItem('access_time', accessTime);
+        } else {
+            accessTime = sessionStorage.getItem('access_time');
         }
+        loadedTime = Date.now();
+    });
+    if (qType == 'pilot' && qDimension == 'length') {
+        let btn = document.getElementById('a-btn');
+        btn.addEventListener('mouseover', function(e) {
+            e.target.removeEventListener(e.type, arguments.callee);
+            alert('Click to answer only after you are ready to answer!!! \n请确认您已思考完毕且完全准备好答题时再点击！');
+        }, false);
+    }
 
-    </script>
+</script>
 {% endblock endscript %}

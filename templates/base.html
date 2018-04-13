@@ -34,7 +34,7 @@
 <body>
     {% block startscript %}
     {% endblock startscript %}
-    <div class="container">
+    <div class="container" id="container">
         <div class="row header">
             {% block header %}
             {% endblock header %}
@@ -58,13 +58,11 @@
     {% block endscript %}
     {% endblock endscript %}
     <script type="text/javascript" src="{% static 'scripts/tooltip.js' %}"></script>
-
     {% if '1d' in request.path %}
-        <script type="text/javascript" src="{% static 'scripts/click_1d.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/click_1d.js' %}"></script>
     {% else %}
-        <script type="text/javascript" src="{% static 'scripts/click.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/click.js' %}"></script>
     {% endif %}
-
     <script type="text/javascript" src="{% static 'scripts/submit.js' %}"></script>
 </body>
 </html>

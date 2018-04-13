@@ -1,9 +1,11 @@
 html, body {
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     font-size: 16px;
+    width: 100%;
     height: 100%;
     margin: 0;
-    overflow: visible;
+    overflow: hidden;
+    position: relative;
 }
 
 canvas {
@@ -34,7 +36,15 @@ div.entrybtns {
 }
 
 div.container {
-    max-width: 1803px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -30px;
+    width: 100%;
+    height: 100%;
+    max-width: 2560px;
+    overflow-y: scroll;
 }
 
 div.header, div.content, div.footer {
@@ -42,8 +52,11 @@ div.header, div.content, div.footer {
     margin-bottom: 15px;
 }
 
+div#example-image {
+    margin-top: -20px;
+}
+
 div.header h2,
-/*div.header h3,*/
 div.content h2,
 div.content p {
     text-align: center;
@@ -100,7 +113,6 @@ p.annotation span {
 }
 
 a.btn-entry {
-    /*margin: auto;*/
     padding-top: 0.5em;
     width: 350px;
     height: 60px;

@@ -2,21 +2,21 @@
 {% load static %}
 
 {% block pagetitle %}
-    Start
+Start
 {% endblock pagetitle %}
 
 {% block header %}
-    <div class="col-2 header"></div>
-    <div class="col-8 header">
-        <h2 class="header-text" data-toggle="tooltip" data-placement="bottom" title="实验正式开始！">The formal testing starts here!</h2>
-        <h3 class="header-text" data-toggle="tooltip" data-placement="top" title="全部问题分为四组，每组10题。做完每道题之后您都可以选择休息或继续。">You are given 4 sets of questions.<br>Each set has an example followed by 5 questions. <br>You may take a rest anytime after finishing a question, or go to next.</h3>
-        <h3 class="header-text" data-toggle="tooltip" data-placement="top" title="当你准备好了，点击“Start”即可开始进入正式实验。">When you are ready, click "Start" to enter the formal testing. </h3>
-    </div>
-    <div class="col-2 header"></div>
+<div class="col-2 header"></div>
+<div class="col-8 header">
+    <h2 class="header-text" data-toggle="tooltip" data-placement="bottom" title="实验正式开始！">The formal testing starts here!</h2>
+    <h3 class="header-text" data-toggle="tooltip" data-placement="top" title="全部问题分为四组，每组10题。做完每道题之后您都可以选择休息或继续。">You are given 4 sets of questions.<br>Each set has an example followed by 5 questions. <br>You may take a rest after finishing a question.</h3>
+    <h3 class="header-text" data-toggle="tooltip" data-placement="top" title="当你准备好了，点击“Start”即可开始进入正式实验。">When you are ready, click "Start" to enter the formal testing. </h3>
+</div>
+<div class="col-2 header"></div>
 {% endblock header %}
 
 {% block footer %}
-    <div class="col footer">
-        <button class="btn btn-primary" type="submit" onclick="clickToStart()">Start</button>
-    </div>
+<div class="col footer">
+    <button class="btn btn-primary" type="submit" onclick="clickToStart()">Start</button>
+</div>
 {% endblock footer %}

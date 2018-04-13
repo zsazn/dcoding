@@ -7,9 +7,9 @@
 <meta name="description" content="Example Quesiton">
 <meta name="author" content="Zheng Zhou">
 <title>
-    {% block pagetitle %}
-        Example question
-    {% endblock pagetitle %}
+{% block pagetitle %}
+Example question
+{% endblock pagetitle %}
 </title>
 <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/vendor/bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/stylesheet.css' %}">
@@ -18,19 +18,18 @@
 
 </head>
 <body>
-
-    <div class="container">
+    <div class="container" id="container">
         <div class="row header">
             <div class="col-2 header"></div>
             <div class="col-8 header" id='header'>
-                <h4 class="header-text" data-toggle="tooltip" data-placement="bottom" title="示例">Example question</h4>
+                <h5 class="header-text" data-toggle="tooltip" data-placement="bottom" title="示例">Here's how the visual representation changes against different numbers.</h5>
             </div>
             <div class="col-2 header"></div>
         </div>
         <div class="row content">
-            <div class="col-2 header"></div>
+            <div class="col-2"></div>
             <div class="col-8 content" id="example-image"></div>
-            <div class="col-2 header"></div>
+            <div class="col-2"></div>
         </div>
         <div class="row footer">
             <div class="col footer">
@@ -49,42 +48,42 @@
         var nextDimension;
         switch(qDimension) {
             case 'start_length':
-                header.innerText = 'The next 5 questions are about Length in Vertical dimension.';
+                header.innerText = 'The next 5 questions are about the Length in Vertical dimension.';
                 img.src = '{% static "img/example_length.png" %}';
                 nextDimension = 'length';
                 break;
             case 'length':
-                header.innerText = 'The next 5 questions are about Length in Both Horizontal and Vertical dimensions.';
+                header.innerText = 'The next 5 questions are about the Length in Horizontal and Vertical dimensions.';
                 img.src = '{% static "img/example_area.png" %}';
                 nextDimension = 'area';
                 break;
             case 'area':
-                header.innerText = 'The next 5 questions are about Length in 3D dimensions.';
+                header.innerText = 'The next 5 questions are about the Length in 3D dimensions.';
                 img.src = '{% static "img/example_volume.png" %}';
                 nextDimension = 'volume';
                 break;
             case 'volume':
-                header.innerText = 'The next 5 questions are about Length in 3D diemensions and the Color.';
+                header.innerText = 'The next 5 questions are about the Length in 3D diemensions and the Colors.';
                 img.src = '{% static "img/example_volume_color.png" %}';
                 nextDimension = 'volume_color';
                 break;
             case 'start_length_global':
-                header.innerText = 'The next 5 questions are about the Vertical Length and Color, referencing Global Extremes.';
+                header.innerHTML = 'The next 5 questions are about the Vertical Length and Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
                 img.src = '{% static "img/example_length_global.png" %}';
                 nextDimension = 'length_global';
                 break;
             case 'length_global':
-                header.innerText = 'The next 5 questions are about the Vertical Length and Color, referencing Local Extremes.';
+                header.innerHTML = 'The next 5 questions are about the Vertical Length and Colors. <br>The reference min and max values are those in the order of the question number.';
                 img.src = '{% static "img/example_length_local.png" %}';
                 nextDimension = 'length_local';
                 break;
             case 'length_local':
-                header.innerText = 'The next 5 questions are about the Vertical Length and Background Color, referencing Global Extremes.';
+                header.innerHTML = 'The next 5 questions are about the Vertical Length and Background Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
                 img.src = '{% static "img/length_global_background.png" %}';
                 nextDimension = 'length_global_background_color';
                 break;
             case 'length_global_background_color':
-                header.innerText = 'The next 5 questions are about the Vertical Length and Background Color, referencing Local Extremes.';
+                header.innerHTML = 'The next 5 questions are about the Vertical Length and Background Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
                 img.src = '{% static "img/example_length_local_background.png" %}';
                 nextDimension = 'length_local_background_color';
                 break;
@@ -103,6 +102,6 @@
                 window.location.href = '/dcoding/question/test/' + nextDimension + '/1/1';
             }
         }
-        </script>
+    </script>
 </body>
 </html>

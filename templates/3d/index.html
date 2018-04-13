@@ -2,66 +2,66 @@
 {% load static %}
 
 {% block startscript %}
-    <script type="text/javascript" src="{% static 'scripts/vendor/Detector.js' %}"></script>
-    <script type="text/javascript">
-        if (!Detector.webgl) {
-            alert('The web browser you are using does not support WebGL. \nPlease change to other most updated modern browser');
-            window.location.href = 'dcoding/end';
-        // } else {
-            // var accessFrom;
-            // if (typeof geoplugin_status === 'function') {
-            //     var geo_status = geoplugin_status();
-            //     if (geo_status == '200') {
-            //         var geo_city = geoplugin_city();
-            //         var geo_region = geoplugin_regionName();
-            //         var geo_country = geoplugin_countryName();
-            //         accessFrom = geo_city + ', ' + geo_region + ', ' + geo_country;
-            //         window.sessionStorage.setItem('accessFrom', accessFrom);
-            //     }
-            // }
-        }
-    </script>
+<script type="text/javascript" src="{% static 'scripts/vendor/Detector.js' %}"></script>
+<script type="text/javascript">
+    if (!Detector.webgl) {
+        alert('The web browser you are using does not support WebGL. \nPlease change to other most updated modern browser');
+        window.location.href = 'dcoding/end';
+    // } else {
+        // var accessFrom;
+        // if (typeof geoplugin_status === 'function') {
+        //     var geo_status = geoplugin_status();
+        //     if (geo_status == '200') {
+        //         var geo_city = geoplugin_city();
+        //         var geo_region = geoplugin_regionName();
+        //         var geo_country = geoplugin_countryName();
+        //         accessFrom = geo_city + ', ' + geo_region + ', ' + geo_country;
+        //         window.sessionStorage.setItem('accessFrom', accessFrom);
+        //     }
+        // }
+    }
+</script>
 {% endblock startscript %}
 
 {% block pagetitle %}
-    Introduction
+Introduction
 {% endblock pagetitle %}
 
 {% block header %}
-    <div class="col-2 header"></div>
-    <div class="col-8 header">
-        <h2 data-toggle="tooltip" data-placement="right" title="欢迎并感谢参与本次实验！">Welcome and thank you for participating the test!</h3>
-        <p class="header-text" data-toggle="tooltip" data-placement="right" title="数据可视化实践通常使用视觉变量包括图形及颜色或二者组合来表示数值。">
-            Data visualization usually utilizes various visual variables, including shapes and colors to represent numerical values.<br>
-        </p>
-        <p class="header-text" data-toggle="tooltip" data-placement="right" title="在这个实验中，您将完成若干组这样的任务：即请您根据图形的形状或（以及）颜色，同时对照参考值的形状与颜色，来估计其表示的数值。">
-            The tasks in the testing will ask you to estimate a numerical value that the centerd graphical representation measures, while referencing the left representation measures a minimum and the one on the right measures a maximum.</p>
-        <p class="header-text" data-toggle="tooltip" data-placement="right" title="在实验中，最大参考值和最小参考值分两类。一类是全局最大值和最小值，分别是1和10000。另一类是区间最大和最小值，即待估值所在数量级区间的最大和最小值。例如，待估值为3500，那么其区间最小值为1000，区间最大值为10000。">
-            The minimum and maximum could be the values in global scope, which are 1 and 10000 during the testing; Or they could be the extreme values in a local scope. For instance, if you are estimating 3500, the minimum reference value in local scope is 1000 while the maximum reference value in local scope is 100000.
-        </p>
-        <p class="header-text" data-toggle="tooltip" data-placement="right" title="每个问题中，您所填写的数字和用以思考和填写的时间将被记录下来。">
-            In each question, the numerical value you estimate and the time you spend on answering will be recored.
-        </p>
-    </div>
-    <div class="col-2 header"></div>
+<div class="col-2 header"></div>
+<div class="col-8 header">
+    <h2 data-toggle="tooltip" data-placement="right" title="欢迎并感谢参与本次实验！">Welcome and thank you for participating the test!</h3>
+    <p class="header-text" data-toggle="tooltip" data-placement="right" title="数据可视化实践通常使用视觉变量包括图形及颜色或二者组合来表示数值。">
+        Data visualization usually utilizes various visual variables, including shapes and colors to represent numerical values.<br>
+    </p>
+    <p class="header-text" data-toggle="tooltip" data-placement="right" title="在这个实验中，您将完成若干组这样的任务：即请您根据图形的形状或（以及）颜色，同时对照参考值的形状与颜色，来估计其表示的数值。">
+        The tasks in the testing will ask you to estimate a numerical value that the centerd graphical representation measures, while referencing the left representation measures a minimum and the one on the right measures a maximum.</p>
+    <p class="header-text" data-toggle="tooltip" data-placement="right" title="在实验中，最大参考值和最小参考值分两类。一类是全局最大值和最小值，分别是1和10000。另一类是区间最大和最小值，即待估值所在数量级区间的最大和最小值。例如，待估值为3500，那么其区间最小值为1000，区间最大值为10000。">
+        The minimum and maximum could be the values in global scope, which are 1 and 10000 during the testing; Or they could be the extreme values in a local scope. For instance, if you are estimating 3500, the minimum reference value in local scope is 1000 while the maximum reference value in local scope is 100000.
+    </p>
+    <p class="header-text" data-toggle="tooltip" data-placement="right" title="每个问题中，您所填写的数字和用以思考和填写的时间将被记录下来。">
+        In each question, the numerical value you estimate and the time you spend on answering will be recored.
+    </p>
+</div>
+<div class="col-2 header"></div>
 {% endblock header %}
 
 {% block content %}
-    <div class="col-2 header"></div>
-    <div class="col-8 content">
-        <p style="text-align: left;" class="header-text" data-toggle="tooltip" data-placement="top" title="下图为测试题示例。左边的柱形表示1000，而右边的柱形表示10000。1000和10000分别是这个区间（1000-10000）的最小和最大极值，柱形的颜色也指示出这一区间。您需要根据这一区间，和左右的参考值，来估测中间柱形所表示的数值。正确答案是7000。"><em>>
-            The example below shows the testing logic: the bar on the left represents 1000 while the right one represents 10000. They are the extreme values in the range of 1000-10000. You'll attempt to estimate the value that the bar in the middle represents. In this case, the actual value is 7000.</em>
-        </p>
-        <img src="{% static 'img/example.png' %}" alt="example_image" width="1200" class="img-fluid">
-    </div>
-    <div class="col-2 header"></div>
+<div class="col-2 header"></div>
+<div class="col-8 content">
+    <p style="text-align: left;" class="header-text" data-toggle="tooltip" data-placement="top" title="下图为测试题示例。左边的柱形表示1000，而右边的柱形表示10000。1000和10000分别是这个区间（1000-10000）的最小和最大极值，柱形的颜色也指示出这一区间。您需要根据这一区间，和左右的参考值，来估测中间柱形所表示的数值。正确答案是7000。"><em>>
+        The example below shows the testing logic: the bar on the left represents 1000 while the right one represents 10000. They are the extreme values in the range of 1000-10000. You'll attempt to estimate the value that the bar in the middle represents. In this case, the actual value is 7000.</em>
+    </p>
+    <img src="{% static 'img/example.png' %}" alt="example_image" width="1200" class="img-fluid">
+</div>
+<div class="col-2 header"></div>
 {% endblock content %}
 
 {% block footer %}
-    <div class="col footer">
-        <p class="header-text" data-toggle="tooltip" data-placement="top" title="在正式实验开始前，您可以先热身一下，做两道练习题，点击下方“Warm-up”即可开始。">
-            Two warm-up questions are prepared for you to get familiar with the testing. Click "Warm-up" below to see them.
-        </p>
-        <button id="wu-btn" class="btn btn-primary" type="submit" onclick="clickToPractice()">Warm-up</button>
-    </div>
+<div class="col footer">
+    <p class="header-text" data-toggle="tooltip" data-placement="top" title="在正式实验开始前，您可以先热身一下，做两道练习题，点击下方“Warm-up”即可开始。">
+        Two warm-up questions are prepared for you to get familiar with the testing. Click "Warm-up" below to see them.
+    </p>
+    <button id="wu-btn" class="btn btn-primary" type="submit" onclick="clickToPractice()">Warm-up</button>
+</div>
 {% endblock footer %}
