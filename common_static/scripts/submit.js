@@ -63,7 +63,7 @@ function submitAnswer() {
                 } else {
                     var msgContent = 'Your answer \
                     <span style="color: #ff0000;"><strong>' + val + '</strong>\
-                    </span> has been submitted. <br><u><i>You may take a rest. \
+                    </span> has been submitted.<br><u><i>You may take a rest.\
                     </i></u><br>Click "Next" to next question when you are \
                     ready.';
                 }

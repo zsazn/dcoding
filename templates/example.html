@@ -8,7 +8,7 @@
 <meta name="author" content="Zheng Zhou">
 <title>
 {% block pagetitle %}
-Example question
+Example
 {% endblock pagetitle %}
 </title>
 <link rel="stylesheet" type="text/css" href="{% static 'stylesheets/vendor/bootstrap.min.css' %}">
@@ -67,26 +67,6 @@ Example question
                 img.src = '{% static "img/example_volume_color.png" %}';
                 nextDimension = 'volume_color';
                 break;
-            case 'start_length_global':
-                header.innerHTML = 'The next 5 questions are about the Vertical Length and Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
-                img.src = '{% static "img/example_length_global.png" %}';
-                nextDimension = 'length_global';
-                break;
-            case 'length_global':
-                header.innerHTML = 'The next 5 questions are about the Vertical Length and Colors. <br>The reference min and max values are those in the order of the question number.';
-                img.src = '{% static "img/example_length_local.png" %}';
-                nextDimension = 'length_local';
-                break;
-            case 'length_local':
-                header.innerHTML = 'The next 5 questions are about the Vertical Length and Background Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
-                img.src = '{% static "img/length_global_background.png" %}';
-                nextDimension = 'length_global_background_color';
-                break;
-            case 'length_global_background_color':
-                header.innerHTML = 'The next 5 questions are about the Vertical Length and Background Colors. <br>The reference min and max values are of the global scale (20 and 10000).';
-                img.src = '{% static "img/example_length_local_background.png" %}';
-                nextDimension = 'length_local_background_color';
-                break;
             default:
                 console.log('example can\'t be loaded.');
         }
@@ -95,12 +75,7 @@ Example question
         img.setAttribute('width', '2000');
         header.className = 'header-text';
         function fromExample() {
-            let href = window.location.href;
-            if (href.indexOf('1d') != -1){
-                window.location.href = '/dcoding-1d/question/test/' + nextDimension + '/1/1';
-            } else {
-                window.location.href = '/dcoding/question/test/' + nextDimension + '/1/1';
-            }
+            window.location.href = '/dcoding/question/test/' + nextDimension + '/1/1';
         }
     </script>
 </body>

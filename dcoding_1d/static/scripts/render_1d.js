@@ -108,9 +108,9 @@ function renderBars(value, extreme, color) {
       .attr('width', svgWidth)
       .attr('height', svgHeight);
 
-    document.getElementById('min-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('max-svg').setAttribute('viewbox', '0 0 600 600');
-    document.getElementById('val-svg').setAttribute('viewbox', '0 0 600 600');
+    document.getElementById('min-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('max-svg').setAttribute('viewBox', '0 0 600 600');
+    document.getElementById('val-svg').setAttribute('viewBox', '0 0 600 600');
 
     let min = qMin,
         max = qMax,
@@ -204,7 +204,7 @@ function renderLegend() {
                    .append('g')
                    .attr('id', 'legend-g')
                    .attr('transform', 'translate(100,0)');
-    document.getElementById('legend-svg').setAttribute('viewbox', '0 0 600 100');
+    document.getElementById('legend-svg').setAttribute('viewBox', '0 0 600 100');
     for (let i = 1; i < orders.length + 1; i++) {
         legend.append('rect')
               .attr('id', 'legend_' + i)

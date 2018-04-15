@@ -36,11 +36,35 @@ Formal Testing Session
 {% if q.q_type == 'pilot' %}
     <h2 id="test">Warm yourself up!</h2>
 {% elif q.q_type == 'test' %}
-{% if q.q_set == 1 %}
-    <h3 class="q-num">Question {{ q.q_index }}</h3>
-{% elif q.q_set == 2 %}
-    <h3 class="q-num">Question {{ q.q_index|add:"5" }}</h3>
-{% endif %}
+    {% if q.q_set == 1 and q.q_index == 1 %}
+        {% if 'background' in q.q_dimension %}
+            {% if 'global' in q.q_dimension %}
+                <h2 class="header-text">
+                    The next 5 questions are about the Vertical Length and Background Colors.<br>The reference min and max values are of the global scale (20 and 10000).
+                </h2>
+                <h3 class="q-num">Question {{ q.q_index }}</h3>
+            {% else %}
+                <h2 class="header-text">
+                    The next 5 questions are about the Vertical Length and Background Colors.<br>The reference min and max values are those within the order of the question number.
+                </h2>
+                <h3 class="q-num">Question {{ q.q_index }}</h3>
+            {% endif %}
+        {% else %}
+            {% if 'global' in q.q_dimension %}
+                <h2 class="header-text">
+                    The next 5 questions are about the Vertical Length and the Colors.<br>The reference min and max values are of the global scale (20 and 10000).
+                </h2>
+                <h3 class="q-num">Question {{ q.q_index }}</h3>
+            {% else %}
+                <h2 class="header-text">
+                    The next 5 questions are about the Vertical Length and the Colors.<br>The reference min and max values are those within the order of the question number.
+                </h2>
+                <h3 class="q-num">Question {{ q.q_index }}</h3>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h3 class="q-num">Question {{ q.q_index }}</h3>
+    {% endif %}
 {% endif %}
 </div>
 {% endblock header %}
