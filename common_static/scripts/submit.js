@@ -93,8 +93,7 @@ function submitAnswer() {
 
 function closeAnswer() {
     if (document.getElementById('input-answer').value == '') {
-        var msgContent = 'Your \
-            <span style="color: #ff0000;"><strong>EMPTY</strong></span> \
+        var msgContent = '<span style="color: #ff0000;"><strong>NO</strong></span> \
             answer for this question will be submitted and you will be directed \
             to the next question. Do you really want to submit and continue \
             with the next question?';

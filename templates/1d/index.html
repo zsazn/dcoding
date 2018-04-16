@@ -25,14 +25,14 @@ Introduction
 {% endblock header %}
 
 {% block content %}
-<div class="col-2 header"></div>
+<div class="col-2 content"></div>
 <div class="col-8 content">
     <p style="text-align: left;" class="header-text" data-toggle="tooltip" data-placement="top" title="下图为测试题示例。左边的柱形表示1000，而右边的柱形表示10000。1000和10000分别是这个区间（1000-10000）的最小和最大极值，柱形的颜色也指示出这一区间。您需要根据这一区间，和左右的参考值，来估测中间柱形所表示的数值。正确答案是7000。"><em>
         The example picture shows the testing logic: the bar on the left represents 1000 while the right one represents 10000. They are the extreme values in the range of 1000-10000. You'll attempt to estimate the value that the bar in the middle represents. In this case, the actual value is 7000.</em>
     </p>
     <img src="{% static 'img/example.png' %}" alt="example_image" width="1280" class="img-fluid">
 </div>
-<div class="col-2 header"></div>
+<div class="col-2 content"></div>
 {% endblock content %}
 
 {% block footer %}

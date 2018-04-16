@@ -130,10 +130,7 @@ class QuestionView(TemplateView):
             answer = answer_input_obj.clean()
             a_val = answer['a_val']
             data['success'] = a_val
-            if 'volume' in q_dimension:
-                q_val = str(int(request.POST.get('q_val'))*10000/15625)
-            else:
-                q_val = request.POST.get('q_val')
+            q_val = request.POST.get('q_val')
             start_answer_time = request.POST.get('start_answer_time')
             submit_answer_time = request.POST.get('submit_answer_time')
             loaded_time = request.POST.get('loaded_time')

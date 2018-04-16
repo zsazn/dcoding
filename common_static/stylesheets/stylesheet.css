@@ -47,7 +47,9 @@ div.container {
     overflow-y: scroll;
 }
 
-div.header, div.content, div.footer {
+div.header,
+div.content,
+div.footer {
     margin-top: 15px;
     margin-bottom: 15px;
 }
@@ -62,6 +64,7 @@ div.content p {
     text-align: center;
 }
 
+div.content,
 div.footer {
     text-align: center;
 }
