@@ -9,8 +9,8 @@ var legendWidth = svgWidth;
 var legendHeight = 80;
 var margin = {'top': 10, 'bottom': 20, 'left': 10, 'right': 10};
 
-const orderNum = 5;
-const orders = [1, 2, 3, 4];
+const orderNum = 4;
+const orders = [1, 2, 3, 4, 5];
 
 const viewWidth = 600,
       viewHeight = 600;
@@ -30,8 +30,9 @@ let colorLinearScale = d3.interpolate(d3.rgb(minColor), d3.rgb(maxColor));
 let colorOrdinalScale = d3.scaleOrdinal()
                           .domain(orders)
                           .range([minColor,
-                                  colorLinearScale(0.33),
-                                  colorLinearScale(0.67),
+                                  colorLinearScale(0.25),
+                                  colorLinearScale(0.5),
+                                  colorLinearScale(0.75),
                                   maxColor])
 
 const args = ['min', 'max', 'val'];
@@ -364,7 +365,7 @@ function renderCubes(value, color) {
                 matColor = 0x888888,
                 backgroundColor = 0xffffff;
             } else if (color == 1) {
-                matColor = colorOrdinalScale(order(data) - 1);
+                matColor = colorOrdinalScale(order(data));
                 backgroundColor = 0xffffff;
             }
             boxMat = new THREE.MeshBasicMaterial({color:matColor, overdraw:0.5});
@@ -609,7 +610,7 @@ function renderLegend() {
                 return colorOrdinalScale(i);
               });
           }
-    for (let j = 0; j < orders.length + 1; j++) {
+    for (let j = 0; j < orders.length; j++) {
         legend.append('text')
               .attr('x', function() {
                 return legendUnit * j;
