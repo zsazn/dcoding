@@ -6,14 +6,16 @@
 from __future__ import unicode_literals
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
-from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import TemplateView
 from dcoding.models import Question, Answer
 from dcoding.forms import AnswerForm
-import random, string
+import random
+import string
 
 QUESTION_TYPES = ['pilot', 'test']
 QUESTION_DIMENSIONS = ['length',
@@ -21,11 +23,13 @@ QUESTION_DIMENSIONS = ['length',
                        'volume',
                        'volume_color']
 QUESTION_VALUES = [7, 75, 670, 5300, 8350]
-random.shuffle(QUESTION_VALUES);
+random.shuffle(QUESTION_VALUES)
+
 
 # Create your views here.
 class IndexView(TemplateView):
     template_name = '3d/index.html'
+
     def get(self, request):
         user_id = ''.join([random.choice(string.ascii_letters) for n in xrange(6)])
         # print 'user_id: ' + user_id
@@ -36,25 +40,34 @@ class IndexView(TemplateView):
             request.session.set_expiry(0)
         return render(request, self.template_name, locals())
 
+
 class StartView(TemplateView):
     template_name = '3d/start.html'
+
     def get(self, request):
         return render(request, self.template_name)
+
 
 class BreakView(TemplateView):
     template_name = '3d/break.html'
+
     def get(self, request):
         return render(request, self.template_name)
+
 
 class ExampleView(TemplateView):
     template_name = 'example.html'
+
     def get(self, request):
         return render(request, self.template_name)
 
+
 class EndView(TemplateView):
     template_name = '3d/end.html'
+
     def get(self, request):
         return render(request, self.template_name)
+
 
 class QuestionView(TemplateView):
     model = Question
@@ -80,10 +93,10 @@ class QuestionView(TemplateView):
     @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         q = get_object_or_404(Question,
-                      q_type=kwargs['type'],
-                      q_dimension=kwargs['dimension'],
-                      q_set=kwargs['set'],
-                      q_index=kwargs['index'])
+                              q_type=kwargs['type'],
+                              q_dimension=kwargs['dimension'],
+                              q_set=kwargs['set'],
+                              q_index=kwargs['index'])
         q_type = kwargs['type']
         q_dimension = kwargs['dimension']
         q_set = int(kwargs['set'])
@@ -104,14 +117,14 @@ class QuestionView(TemplateView):
                     q_index += 1
                     # print q_index
                 elif q_index and q_index == 5:
-                      q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
-                      if q_dimension_index == 3:
-                          request.session.flush()
-                          return HttpResponseRedirect('/dcoding/end')
-                      elif q_dimension_index < 3:
-                          # if q_dimension == 'volume' or q_dimension == 'volume_color':
-                          #     return HttpResponseRedirect('/dcoding/break')
-                          return HttpResponseRedirect('/dcoding/example')
+                    q_dimension_index = QUESTION_DIMENSIONS.index(q_dimension)
+                    if q_dimension_index == 3:
+                        request.session.flush()
+                        return HttpResponseRedirect('/dcoding/end')
+                    elif q_dimension_index < 3:
+                        # if q_dimension == 'volume' or q_dimension == 'volume_color':
+                            # return HttpResponseRedirect('/dcoding/break')
+                        return HttpResponseRedirect('/dcoding/example')
                 else:
                     raise Http404('Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding:question',
@@ -141,31 +154,31 @@ class QuestionView(TemplateView):
 
             if len(Answer.objects.filter(a_id=a_id)) == 0:
                 a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
-                           q_val=q_val,
-                           q_dimension=q_dimension,
-                           q_set=q_set,
-                           q_index=q_index,
-                           a_page_loaded=loaded_time,
-                           a_start_time=start_answer_time,
-                           a_submit_time=submit_answer_time,
-                           a_access_time=access_time,
-                           # a_access_from=access_from,
-                           t_thinking=t_thinking,
-                           t_answering=t_answering)
+                                          q_val=q_val,
+                                          q_dimension=q_dimension,
+                                          q_set=q_set,
+                                          q_index=q_index,
+                                          a_page_loaded=loaded_time,
+                                          a_start_time=start_answer_time,
+                                          a_submit_time=submit_answer_time,
+                                          a_access_time=access_time,
+                                          # a_access_from=access_from,
+                                          t_thinking=t_thinking,
+                                          t_answering=t_answering)
             else:
                 if len(Answer.objects.filter(a_id=a_id).filter(q_id=q.id)) == 0:
                     a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
-                               q_val=q_val,
-                               q_dimension=q_dimension,
-                               q_set=q_set,
-                               q_index=q_index,
-                               a_page_loaded=loaded_time,
-                               a_start_time=start_answer_time,
-                               a_submit_time=submit_answer_time,
-                               a_access_time=access_time,
-                               # a_access_from=access_from,
-                               t_thinking=t_thinking,
-                               t_answering=t_answering)
+                                              q_val=q_val,
+                                              q_dimension=q_dimension,
+                                              q_set=q_set,
+                                              q_index=q_index,
+                                              a_page_loaded=loaded_time,
+                                              a_start_time=start_answer_time,
+                                              a_submit_time=submit_answer_time,
+                                              a_access_time=access_time,
+                                              # a_access_from=access_from,
+                                              t_thinking=t_thinking,
+                                              t_answering=t_answering)
         else:
             error_msg = answer_input_obj.errors
             data['error'] = error_msg
