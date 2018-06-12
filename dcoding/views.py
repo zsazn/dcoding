@@ -31,7 +31,8 @@ class IndexView(TemplateView):
     template_name = '3d/index.html'
 
     def get(self, request):
-        user_id = ''.join([random.choice(string.ascii_letters) for n in xrange(6)])
+        user_id = ''.join([random.choice(string.ascii_letters)
+                           for n in xrange(6)])
         # print 'user_id: ' + user_id
         try:
             tmp = request.session['user_id']
@@ -106,10 +107,10 @@ class QuestionView(TemplateView):
                 if q_dimension == 'length':
                     q_dimension = 'area'
                     return HttpResponseRedirect(reverse('dcoding:question',
-                                                kwargs={'type': 'pilot',
-                                                        'dimension': 'area',
-                                                        'set': 1,
-                                                        'index': 1}))
+                                                        kwargs={'type': 'pilot',
+                                                                'dimension': 'area',
+                                                                'set': 1,
+                                                                'index': 1}))
                 elif q_dimension == 'area':
                     return HttpResponseRedirect('/dcoding/start')
             elif q_type and q_type == 'test':
@@ -126,7 +127,8 @@ class QuestionView(TemplateView):
                             # return HttpResponseRedirect('/dcoding/break')
                         return HttpResponseRedirect('/dcoding/example')
                 else:
-                    raise Http404('Something just went wrong. Please contact Zheng.')
+                    raise Http404(
+                        'Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding:question',
                                                 kwargs={'type': 'test',
                                                         'dimension': q_dimension,
