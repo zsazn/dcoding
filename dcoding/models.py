@@ -10,6 +10,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Question(models.Model):
     q_type = models.CharField(max_length=255)
     q_dimension = models.CharField(max_length=255)
@@ -20,6 +21,7 @@ class Question(models.Model):
 
     def __unicode__(self):
         return 'Question %s' % self.id
+
 
 class Answer(models.Model):
     a_id = models.CharField(max_length=6, null=True, blank=True)
