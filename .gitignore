@@ -109,5 +109,7 @@ ENV/
 # misc
 .map
 settings.py
-background-Copy.png
 Thumbs.db
+
+#npm
+/node_modules
