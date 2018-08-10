@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Zheng Zhou
-# Date: 3/8/2018
+# Date: 8/8/2018
 
 from __future__ import unicode_literals
 from django.core.exceptions import ObjectDoesNotExist
@@ -32,7 +32,7 @@ class IndexView(TemplateView):
 
     def get(self, request):
         user_id = ''.join([random.choice(string.ascii_letters)
-                           for n in xrange(6)])
+                          for n in xrange(6)])
         # print 'user_id: ' + user_id
         try:
             tmp = request.session['user_id']
@@ -107,10 +107,11 @@ class QuestionView(TemplateView):
                 if q_dimension == 'length':
                     q_dimension = 'area'
                     return HttpResponseRedirect(reverse('dcoding:question',
-                                                        kwargs={'type': 'pilot',
-                                                                'dimension': 'area',
-                                                                'set': 1,
-                                                                'index': 1}))
+                                                        kwargs={
+                                                          'type': 'pilot',
+                                                          'dimension': 'area',
+                                                          'set': 1,
+                                                          'index': 1}))
                 elif q_dimension == 'area':
                     return HttpResponseRedirect('/dcoding/start')
             elif q_type and q_type == 'test':
@@ -123,17 +124,19 @@ class QuestionView(TemplateView):
                         request.session.flush()
                         return HttpResponseRedirect('/dcoding/end')
                     elif q_dimension_index < 3:
-                        # if q_dimension == 'volume' or q_dimension == 'volume_color':
+                        # if q_dimension == 'volume' or
+                        #    q_dimension == 'volume_color':
                             # return HttpResponseRedirect('/dcoding/break')
                         return HttpResponseRedirect('/dcoding/example')
                 else:
                     raise Http404(
                         'Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding:question',
-                                                kwargs={'type': 'test',
-                                                        'dimension': q_dimension,
-                                                        'set': q_set,
-                                                        'index': q_index}))
+                                                kwargs={
+                                                  'type': 'test',
+                                                  'dimension': q_dimension,
+                                                  'set': q_set,
+                                                  'index': q_index}))
         answer_input_obj = AnswerForm(request.POST)
         data = dict()
         if 'user_id' in request.session:
@@ -155,7 +158,9 @@ class QuestionView(TemplateView):
             # access_from = request.POST.get('access_from')
 
             if len(Answer.objects.filter(a_id=a_id)) == 0:
-                a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                a = Answer.objects.create(a_id=a_id,
+                                          a_val=a_val,
+                                          q_id=q.id,
                                           q_val=q_val,
                                           q_dimension=q_dimension,
                                           q_set=q_set,
@@ -169,7 +174,9 @@ class QuestionView(TemplateView):
                                           t_answering=t_answering)
             else:
                 if len(Answer.objects.filter(a_id=a_id).filter(q_id=q.id)) == 0:
-                    a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                    a = Answer.objects.create(a_id=a_id,
+                                              a_val=a_val,
+                                              q_id=q.id,
                                               q_val=q_val,
                                               q_dimension=q_dimension,
                                               q_set=q_set,

@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Zheng Zhou
-# Date: 3/8/2018
+# Date: 8/8/2018
 
 from __future__ import unicode_literals
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
-from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, get_object_or_404,
+from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -32,7 +33,7 @@ class IndexView(TemplateView):
 
     def get(self, request):
         user_id = ''.join([random.choice(string.ascii_letters)
-                           for n in xrange(6)])
+                          for n in xrange(6)])
         # print 'user_id: ' + user_id
         try:
             tmp = request.session['user_id']
@@ -118,10 +119,11 @@ class QuestionView(TemplateView):
                     raise Http404(
                         'Something just went wrong. Please contact Zheng.')
             return HttpResponseRedirect(reverse('dcoding_1d:question',
-                                                kwargs={'type': 'test',
-                                                        'dimension': q_dimension,
-                                                        'set': q_set,
-                                                        'index': q_index}))
+                                                kwargs={
+                                                    'type': 'test',
+                                                    'dimension': q_dimension,
+                                                    'set': q_set,
+                                                    'index': q_index}))
         answer_input_obj = AnswerForm(request.POST)
         data = dict()
         if 'user_id' in request.session:
@@ -144,7 +146,9 @@ class QuestionView(TemplateView):
             # access_from = request.POST.get('access_from')
 
             if len(Answer.objects.filter(a_id=a_id)) == 0:
-                a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                a = Answer.objects.create(a_id=a_id,
+                                          a_val=a_val,
+                                          q_id=q.id,
                                           q_val=q_val,
                                           q_dimension=q_dimension,
                                           q_set=q_set,
@@ -158,7 +162,9 @@ class QuestionView(TemplateView):
                                           t_answering=t_answering)
             else:
                 if len(Answer.objects.filter(a_id=a_id).filter(q_id=q.id)) == 0:
-                    a = Answer.objects.create(a_id=a_id, a_val=a_val, q_id=q.id,
+                    a = Answer.objects.create(a_id=a_id,
+                                              a_val=a_val,
+                                              q_id=q.id,
                                               q_val=q_val,
                                               q_dimension=q_dimension,
                                               q_set=q_set,

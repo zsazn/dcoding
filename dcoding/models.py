@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Zheng Zhou
-# Date: 3/8/2018
+# Date: 8/8/2018
 
 
 from __future__ import unicode_literals
@@ -26,7 +26,10 @@ class Question(models.Model):
 class Answer(models.Model):
     a_id = models.CharField(max_length=6, null=True, blank=True)
     a_val = models.PositiveIntegerField(null=True, blank=True)
-    q = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
+    q = models.ForeignKey(Question,
+                          on_delete=models.CASCADE,
+                          null=True,
+                          blank=True)
     q_val = models.PositiveIntegerField(null=True, blank=True)
     q_dimension = models.CharField(max_length=255, null=True, blank=True)
     q_set = models.PositiveIntegerField(null=True, blank=True)
@@ -41,4 +44,5 @@ class Answer(models.Model):
 
     def __unicode__(self):
         return 'Answer of %s' % self.a_id + 'to question ' + str(self.q.id) + \
-               ' accesed at ' + self.a_access_time + ' from ' + self.a_access_from
+               ' accesed at ' + self.a_access_time + ' from ' + \
+               self.a_access_from
