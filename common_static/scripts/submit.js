@@ -19,9 +19,9 @@ function submitAnswer() {
     let tThinking = startAnswerTime - loadedTime;
     let tAnswering = submitAnswerTime - startAnswerTime;
 
-    let t1 = new Date(loadedTime);
-    let t2 = new Date(startAnswerTime);
-    let t3 = new Date(submitAnswerTime);
+    let loadedTimeStr = new Date(loadedTime);
+    let startAnswerTimeStr = new Date(startAnswerTime);
+    let submitAnswerTimeStr = new Date(submitAnswerTime);
 
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
@@ -36,9 +36,9 @@ function submitAnswer() {
         data: {
             access_time: accessTime,
             // access_from: accessFrom,
-            loaded_time: t1,
-            start_answer_time: t2,
-            submit_answer_time: t3,
+            loaded_time: loadedTimeStr,
+            start_answer_time: startAnswerTimeStr,
+            submit_answer_time: submitAnswerTimeStr,
             t_thinking: tThinking,
             t_answering: tAnswering,
             a_val: aVal,
