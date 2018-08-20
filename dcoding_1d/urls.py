@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Author: Zheng Zhou
 # Date: 3/8/2018
