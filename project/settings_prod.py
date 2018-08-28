@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('/etc/secret_key') as f:
+with open('/etc/dcoding_conf/secret_key') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -86,7 +86,7 @@ SESSION_COOKIE_HTTPONLY = True
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-with open('dbconf') as file:
+with open('/etc/dcoding_conf/db') as file:
     DB_PASSWORD = file.read().strip
     DATABASES = {
         # 'default': {
