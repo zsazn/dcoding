@@ -86,20 +86,23 @@ SESSION_COOKIE_HTTPONLY = True
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': os.path.join(BASE_DIR, 'dcoding.sqlite3'),
-    #},
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'dcoding',
-         'USER': 'root',
-         'PASSWORD': 'wenjie0718!',
-         'HOST': '127.0.0.1',
-         'PORT': 3306,
-     },
-}
+with open('dbconf') as file:
+    DB_PASSWORD = file.read().strip
+    DATABASES = {
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': os.path.join(BASE_DIR, 'dcoding.sqlite3'),
+        # },
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'dcoding',
+            'USER': 'root',
+            'PASSWORD': DB_PASSWORD,
+            'HOST': '127.0.0.1',
+            'PORT': 3306,
+        },
+    }
+    file.close()
 
 
 # Password validation
@@ -139,7 +142,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'dcoding/static'), os.path.join(BASE_DIR, 'dcoding_1d/static'), os.path.join(BASE_DIR, 'common_static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'dcoding/static'),
+    os.path.join(BASE_DIR, 'dcoding_1d/static'),
+    os.path.join(BASE_DIR, 'common_static')
+    ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
