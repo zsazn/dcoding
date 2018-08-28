@@ -102,7 +102,6 @@ with open('dbconf') as file:
             'PORT': 3306,
         },
     }
-    file.close()
 
 
 # Password validation
