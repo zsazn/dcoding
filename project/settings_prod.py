@@ -87,11 +87,8 @@ SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 with open('/etc/dcoding_conf/db') as file:
-    DB_ENGINE = file.readline()
-    DB_NAME = file.readline()
-    DB_USER = file.readline()
-    DB_PASSWORD = file.readline()
-    DB_HOST = file.readline()
+    db = file.rea().splitlines()
+    DB_ENGINE, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST = map(str, db)
     DATABASES = {
         # 'default': {
         #     'ENGINE': 'django.db.backends.sqlite3',
