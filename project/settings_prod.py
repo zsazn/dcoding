@@ -87,18 +87,22 @@ SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 with open('/etc/dcoding_conf/db') as file:
-    DB_PASSWORD = file.read().strip
+    DB_ENGINE = file.readline()
+    DB_NAME = file.readline()
+    DB_USER = file.readline()
+    DB_PASSWORD = file.readline()
+    DB_HOST = file.readline()
     DATABASES = {
         # 'default': {
         #     'ENGINE': 'django.db.backends.sqlite3',
         #     'NAME': os.path.join(BASE_DIR, 'dcoding.sqlite3'),
         # },
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'dcoding',
-            'USER': 'root',
+            'ENGINE': DB_ENGINE,
+            'NAME': DB_NAME,
+            'USER': DB_USER,
             'PASSWORD': DB_PASSWORD,
-            'HOST': '127.0.0.1',
+            'HOST': DB_HOST,
             'PORT': 3306,
         },
     }
